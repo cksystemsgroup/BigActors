@@ -1,0 +1,21 @@
+uint64 srcVehicleId
+uint64 dstVehicleId
+uint8 type
+	uint8 CT_NONE=0
+	uint8 CT_ETHERNET_10M=1
+	uint8 CT_ETHERNET_100M=2
+	uint8 CT_ETHERNET_1G=3
+	uint8 CT_ETHERNET_10G=4
+	uint8 CT_WIFI_2MB=10
+	uint8 CT_WIFI_11MB=11
+	uint8 CT_WIFI_27MB=12
+	uint8 CT_WIFI_54MB=13
+	uint8 CT_WIFI_600MB=14
+	uint8 CT_WIFI_1300MB=15
+	uint8 CT_WIFI_7000MB=16
+	uint8 CT_MESH_500kB=20
+	uint8 CT_ACOUSTIC_7kB=30
+	uint8 CT_ACOUSTIC_9kB=31
+	uint8 CT_ACOUSTIC_14kB=32
+	uint8 CT_ACOUSTIC_31kB=33
+time stamp

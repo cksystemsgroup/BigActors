@@ -1,0 +1,12 @@
+uint64 vehicleId
+LatLngAlt position
+float32 heading
+uint32 taskId
+uint8 taskState
+    uint8 TS_TODO=1
+    uint8 TS_IN_PROGRESS=2
+    uint8 TS_DONE=3
+uint8 vehicleState
+    uint8 VS_IDLE=1
+    uint8 VS_BUSY=2
+time stamp
