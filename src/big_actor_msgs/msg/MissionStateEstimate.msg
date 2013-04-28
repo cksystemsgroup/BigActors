@@ -1,5 +1,5 @@
 Header header
-uint64 vehicleIdSender
+uint64 srcVehicleId
 Vehicle[] vehicles
 Connectivity[] connections
 Location[] locations
