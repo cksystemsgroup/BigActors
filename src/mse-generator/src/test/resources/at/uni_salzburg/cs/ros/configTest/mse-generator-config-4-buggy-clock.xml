@@ -1,0 +1,4 @@
+<!-- this is a comment -->
+<config>
+	<clock className="at.uni_salzburg.cs.ros.artificer.Buggy1ClockImpl" />
+</config>

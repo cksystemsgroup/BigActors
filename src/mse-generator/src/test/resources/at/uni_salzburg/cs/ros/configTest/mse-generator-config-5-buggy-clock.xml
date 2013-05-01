@@ -1,0 +1,3 @@
+<config>
+	<clock className="at.uni_salzburg.cs.ros.artificer.Buggy2ClockImpl" />
+</config>

@@ -1,0 +1,4 @@
+
+<config>
+	<clock className="at.uni_salzburg.cs.ros.artificer.NoClockImpl" />
+</config>
