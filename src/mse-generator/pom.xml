@@ -7,7 +7,7 @@
 	<name>MSE Generator</name>
 	<description>MSE Generator</description>
 
-	<inceptionYear>2011</inceptionYear>
+	<inceptionYear>2013</inceptionYear>
 
 	<organization>
 		<name>University of Salzburg - Computational Systems Group</name>
@@ -29,7 +29,7 @@
 			<name>Clemens Krainer</name>
 			<email>clemens.krainer@gmail.com</email>
 			<roles>
-				<role>Project Member</role>
+				<role>Architect</role>
 			</roles>
 			<organization>University of Salzburg</organization>
 		</developer>
