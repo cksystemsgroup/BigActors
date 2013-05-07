@@ -80,13 +80,12 @@ public class VehicleData implements Updatable
      */
     public Vehicle getVehicle()
     {
-        //        Vehicle vehicle = node.getTopicMessageFactory().newFromType(Vehicle._TYPE);
         vehicle.setHeading(heading);
         vehicle.setPosition(currentPosition);
         vehicle.setStamp(Time.fromMillis(System.currentTimeMillis()));
         vehicle.setTaskId(0);
-        vehicle.setTaskState(Vehicle.TS_DONE);
-        vehicle.setVehicleState(Vehicle.VS_IDLE);
+        vehicle.setTaskState(endTime >= clock.currentTimeMillis() ? Vehicle.TS_IN_PROGRESS : Vehicle.TS_DONE);
+        vehicle.setVehicleState(busy ? Vehicle.VS_BUSY : Vehicle.VS_IDLE);
         return vehicle;
     }
 
