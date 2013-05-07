@@ -18,4 +18,4 @@ uint8 type
 	uint8 CT_ACOUSTIC_9kB=31
 	uint8 CT_ACOUSTIC_14kB=32
 	uint8 CT_ACOUSTIC_31kB=33
-time stamp
+uint64 timeStamp

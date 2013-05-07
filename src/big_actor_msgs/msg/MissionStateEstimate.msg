@@ -1,4 +1,4 @@
-Header header
+uint64 timeStamp
 uint64 srcVehicleId
 Vehicle[] vehicles
 Connectivity[] connections
