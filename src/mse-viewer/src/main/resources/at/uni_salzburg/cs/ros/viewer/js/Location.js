@@ -17,12 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ros.viewer.pages;
 
-/**
- * About page.
+/*
+ * Quadrotor icon
  */
-public class About
-{
+L.Location = L.Polygon.extend({
 
-}
+	options : {
+		stroke: true,
+		color: '#03f',
+		weight: 3,
+		opacity: 0.3,
+		fill: true,
+		fillColor: '#03f',
+		fillOpacity: 0.15,
+		dashArray: null,
+		clickable: false,
+	}
+
+});
+

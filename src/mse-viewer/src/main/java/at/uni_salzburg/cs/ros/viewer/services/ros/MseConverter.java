@@ -29,12 +29,12 @@ import big_actor_msgs.Vehicle;
 
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
-import org.ros.message.Time;
 
 import java.util.List;
 
-import std_msgs.Header;
-
+/**
+ * MseConverter
+ */
 public interface MseConverter
 {
     /**
@@ -42,12 +42,6 @@ public interface MseConverter
      * @return the created JSON object
      */
     JSONObject convertMseToJSON(MissionStateEstimate mse);
-
-    /**
-     * @param header the header
-     * @return the created JSON object
-     */
-    JSONObject convertHeaderToJSON(Header header);
 
     /**
      * @param connections the connection list
@@ -96,12 +90,6 @@ public interface MseConverter
      * @return the created JSON object
      */
     JSONObject convertVehicleToJSON(Vehicle vehicle);
-
-    /**
-     * @param time the time stamp
-     * @return the created JSON object
-     */
-    JSONObject convertStampToJSON(Time time);
 
     /**
      * @param boundaries the boundary coordinates

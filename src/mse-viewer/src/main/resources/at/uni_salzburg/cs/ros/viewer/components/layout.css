@@ -29,7 +29,7 @@ html,body {
 	background-color: #f5f5f5;
 }
 
-Lastly, apply responsive CSS fixes as necessary
+// Lastly, apply responsive CSS fixes as necessary
 @media ( max-width : 1920px) {
 	#footer {
 		margin-left: -20px;

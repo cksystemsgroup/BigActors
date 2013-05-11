@@ -33,7 +33,6 @@ public class VehicleArtificer extends Artificer
 {
     private List<VehicleData> vehicleData;
     private Configuration configuration;
-
     /**
      * @param configuration configuration
      */

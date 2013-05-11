@@ -26,7 +26,6 @@ import at.uni_salzburg.cs.ros.artificer.TaskArtificer;
 import at.uni_salzburg.cs.ros.artificer.VehicleArtificer;
 
 import org.ros.concurrent.CancellableLoop;
-import org.ros.message.Time;
 import org.ros.node.topic.Publisher;
 
 import java.util.Timer;
@@ -39,6 +38,8 @@ public class MsePublisher extends CancellableLoop
     private static final int ARTIFICER_WAIT_PERIOD = 1000;
 
     private static final long SCHEDULE_SETUP_DELAY = 0;
+    
+    private static final long SCHEDULE_CYCLE = 1000;
 
     private Publisher<big_actor_msgs.MissionStateEstimate> publisher;
 
@@ -71,10 +72,10 @@ public class MsePublisher extends CancellableLoop
     protected void setup()
     {
         configuration.getNode().getLog().info("MsePublisher.setup()");
-        timer.schedule(connectionArtificer, SCHEDULE_SETUP_DELAY);
-        timer.schedule(locationArtificer, SCHEDULE_SETUP_DELAY);
-        timer.schedule(taskArtificer, SCHEDULE_SETUP_DELAY);
-        timer.schedule(vehicleArtificer, SCHEDULE_SETUP_DELAY);
+        timer.schedule(connectionArtificer, SCHEDULE_SETUP_DELAY, SCHEDULE_CYCLE);
+        timer.schedule(locationArtificer, SCHEDULE_SETUP_DELAY, SCHEDULE_CYCLE);
+        timer.schedule(taskArtificer, SCHEDULE_SETUP_DELAY, SCHEDULE_CYCLE);
+        timer.schedule(vehicleArtificer, SCHEDULE_SETUP_DELAY, SCHEDULE_CYCLE);
     }
 
     /**
@@ -85,7 +86,7 @@ public class MsePublisher extends CancellableLoop
     {
         configuration.getNode().getLog().info("MsePublisher.loop()");
         big_actor_msgs.MissionStateEstimate mse = publisher.newMessage();
-        mse.getHeader().setStamp(Time.fromMillis(System.currentTimeMillis()));
+        mse.setTimeStamp(System.currentTimeMillis());
         mse.setConnections(connectionArtificer.currentConnections());
         mse.setLocations(locationArtificer.currentLocations());
         mse.setTasks(taskArtificer.currentTasks());

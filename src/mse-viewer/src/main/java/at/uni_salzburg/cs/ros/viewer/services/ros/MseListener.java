@@ -29,5 +29,5 @@ public interface MseListener
     /**
      * @return the current mission state estimate.
      */
-    public MissionStateEstimate getMessage();
+    MissionStateEstimate getMessage();
 }

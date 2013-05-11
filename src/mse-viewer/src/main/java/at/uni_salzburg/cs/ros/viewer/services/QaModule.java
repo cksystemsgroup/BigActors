@@ -27,8 +27,16 @@ import org.apache.tapestry5.ioc.ServiceBinder;
  * This module is automatically included as part of the Tapestry IoC Registry if <em>tapestry.execution-mode</em>
  * includes <code>qa</code> ("quality assurance").
  */
-public class QaModule
+public final class QaModule
 {
+    private QaModule()
+    {
+        // intentionally empty
+    }
+    
+    /**
+     * @param binder the service binder
+     */
     public static void bind(ServiceBinder binder)
     {
         // Bind any services needed by the QA team to produce their reports
@@ -36,6 +44,9 @@ public class QaModule
     }
 
 
+    /**
+     * @param configuration the mapped configuration
+     */
     public static void contributeApplicationDefaults(
             MappedConfiguration<String, Object> configuration)
     {

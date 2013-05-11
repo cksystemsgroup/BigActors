@@ -52,70 +52,79 @@ function getRect(o) {
 
 function adjustMapSize() {
 	var r = getRect('footer');
-	// alert(' t='+ r.top + ' l=' + r.left + ' h=' + r.height + ' w=' +
-	// r.width);
 	var h = r.top - 40;
 	document.getElementById('map').style.height = h + 'px';
-	// document.getElementById('map').style.width = '100%';
 }
-
-var firstUpdate = 1;
 
 function adjustMapCenter() {
 	var minLat = 90;
 	var maxLat = -90;
-	var minLon = 180;
-	var maxLon = -180;
+	var minLng = 180;
+	var maxLng = -180;
 
 	var loc;
 	var found = 0;
 	for (loc in locations) {
-		var b = locations[loc].boundaries;
-		for ( var k = 0, l = b.length; k < l; ++k) {
-			if (b[k].lat < minLat) {
-				minLat = b[k].lat;
-			}
-			if (b[k].lat > maxLat) {
-				maxLat = b[k].lat;
-			}
-			if (b[k].lon < minLon) {
-				minLon = b[k].lon;
-			}
-			if (b[k].lon > maxLon) {
-				maxLon = b[k].lon;
-			}
-			found = 1;
+		var b = locations[loc].getBounds();
+		var ne = b.getNorthEast();
+		var sw = b.getSouthWest();
+		if (sw.lat < minLat) {
+			minLat = sw.lat;
 		}
+		if (ne.lat > maxLat) {
+			maxLat = ne.lat;
+		}
+		if (sw.lng < minLng) {
+			minLng = sw.lng;
+		}
+		if (ne.lng > maxLng) {
+			maxLng = ne.lng;
+		}
+		found = 1;
 	}
-	
+
 	if (found) {
-		map.setView([ (maxLat+minLat)/2, (maxLon+minLon)/2 ], 13);
+		map.fitBounds([ [ minLat, minLng ], [ maxLat, maxLng ] ]);
 	}
 }
+
+function toLatLngArray(points) {
+	var latLngs = new Array();
+
+	for ( var k = 0, l = points.length; k < l; ++k) {
+		latLngs.push(new L.LatLng(points[k].lat, points[k].lon))
+	}
+
+	return latLngs;
+}
+
+var firstUpdate = 1;
 
 function updateLocations(data) {
 	if (!data) {
 		return;
 	}
-	console.log("success");
-
-	for ( var k = 0, l = data.length; k < l; ++k) {
-		var loc = data[k];
-		if (locations[data[k].locationId]) {
-			locations[data[k].locationId] = data[k];
-		} else {
-			locations[data[k].locationId] = data[k];
-		}
-		
-		
-		
+	
+	var oldLocations = {};
+	for ( var id in locations) {
+		oldLocations[id] = 1;
 	}
 	
+	for ( var k = 0, l = data.length; k < l; ++k) {
+		var loc = data[k];
+		var id = loc.locationId;
+		delete oldLocations[id];
+		if (!locations[id]) {
+			locations[id] = new L.Location(toLatLngArray(loc.boundaries));
+			locationLayer.addLayer(locations[id]);
+		}
+	}
 	
+	for ( var id in oldLocations) {
+		locationLayer.removeLayer(locations[id]);
+		delete locations[id];
+	}
 	
-	
-	
-
 	if (firstUpdate) {
 		firstUpdate = 0;
 		adjustMapCenter();
@@ -123,59 +132,96 @@ function updateLocations(data) {
 }
 
 var t = 0;
+var taskStateMap = {
+	0 : 'none',
+	1 : 'todo',
+	2 : 'inProgress',
+	3 : 'done',
+	4 : 'assigned',
+	5 : 'cancelled'
+};
+
+var vehicleStateMap = {
+	0 : 'none',
+	1 : 'idle',
+	2 : 'busy'
+};
+
 function updateVehicles(data) {
 	if (!data) {
 		return;
 	}
-	console.log("success");
 
-	if (t == 0) {
-		vehicles['01'].setVehicleState('none');
-		// vehicles['01'].setLatLng([ 51.5, 0.0 ]);
-		t = 1;
-	} else {
-		vehicles['01'].setVehicleState('other');
-		// vehicles['01'].setLatLng([ 51.5, -0.09 ]);
-		t = 0;
+	var oldVehicles = {};
+	for ( var id in vehicles) {
+		oldVehicles[id] = 1;
 	}
-	vehicles['01'] = L.quadrotorMarker([ 51.5, 0.0 ]).addTo(map);
-	
-	
-	
-	
-	
+
+	for ( var k = 0, l = data.length; k < l; ++k) {
+		var vehicle = data[k];
+		var id = vehicle.vehicleId;
+		delete oldVehicles[id];
+		var pos = [ vehicle.position.lat, vehicle.position.lon ];
+		if (vehicles[id]) {
+			vehicles[id].setLatLng(pos);
+		} else {
+			vehicles[id] = L.quadrotorMarker(pos);
+			vehicleLayer.addLayer(vehicles[id]);
+		}
+		vehicles[id].setVehicleState(id, vehicleStateMap[vehicle.vehicleState]);
+		vehicles[id].setTaskState(vehicle.taskId, taskStateMap[vehicle.taskState]);
+	}
+
+	for ( var id in oldVehicles) {
+		vehicleLayer.removeLayer(vehicles[id]);
+		delete vehicles[id];
+	}
 }
 
 var map;
+var locationLayer;
+var vehicleLayer;
 
 function mseViewerInit() {
 	adjustMapSize();
 
 	L.Icon.Default.imagePath = 'images';
+	
+	var tileServerUrl1 = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+	var tileServerUrl2 = 'http://khm1.google.com/kh/v=128&src=app&x={x}&y={y}&z={z}&s=Galileo'
+	var attribution1 = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+	var attribution2 = '&copy; <a href="http://www.google.com">Google</a>';
+	
+	var emptyLayer = L.layerGroup();
+	var tileLayer1 = L.tileLayer(tileServerUrl1, {attribution : attribution1});
+	var tileLayer2 = L.tileLayer(tileServerUrl2, {attribution : attribution2});
+	locationLayer = L.layerGroup();
+	vehicleLayer = L.layerGroup();
+	
+	map = L.map('map', {
+		center: [47.82210, 13.04077],
+		zoom: 10,
+		layers: [emptyLayer, locationLayer, vehicleLayer]
+	});
 
-	// create a map in the "map" div, set the view to a given place and zoom
-	map = L.map('map').setView([ 51.505, -0.09 ], 13);
+	var baseMaps = {
+		"No Map" : emptyLayer,
+	    "Minimal": tileLayer1,
+	    "Satellite" : tileLayer2
+	};
 
-	// add an OpenStreetMap tile layer
-	L
-			.tileLayer(
-					'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-					{
-						attribution : '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-					}).addTo(map);
+	var overlayMaps = {
+	    "Locations": locationLayer,
+	    "Vehicles" : vehicleLayer
+	};
+	
+	L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-	// add a marker in the given location, attach some popup content to it and
-	// open the popup
-	// L.marker([ 51.5, 0.0 ]).addTo(map).bindPopup('A pretty CSS3 popup. <br>
-	// Easily customizable.').openPopup();
-	// L.marker([ 51.5, 0.0 ]).addTo(map);
+	$.getJSON("mse/locations", updateLocations);
+	$.getJSON("mse/vehicles", updateVehicles);
 
-//	vehicles['01'] = L.quadrotorMarker([ 51.5, 0.0 ]).addTo(map);
+	setInterval('$.getJSON( "mse/locations", updateLocations)', 5000);
+	setInterval('$.getJSON( "mse/vehicles", updateVehicles)', 1000);
 
-	setInterval(
-			'$.getJSON( "mse/locations", function(json) {updateLocations(json)})',
-			5000);
-	setInterval(
-			'$.getJSON( "mse/vehicles", function(json) {updateVehicles(json)})',
-			1000);
+	$(window).resize(_.debounce(adjustMapSize, 500));
 }

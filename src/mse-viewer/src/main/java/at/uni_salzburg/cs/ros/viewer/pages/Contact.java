@@ -19,6 +19,9 @@
  */
 package at.uni_salzburg.cs.ros.viewer.pages;
 
+/**
+ * Contact page.
+ */
 public class Contact
 {
 

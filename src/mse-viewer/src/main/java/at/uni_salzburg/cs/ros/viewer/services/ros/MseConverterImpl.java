@@ -29,19 +29,22 @@ import big_actor_msgs.Vehicle;
 
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
-import org.ros.message.Time;
-
-import std_msgs.Header;
 
 import java.util.List;
 
+/**
+ * MseConverterImpl
+ */
 public class MseConverterImpl implements MseConverter
 {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertMseToJSON(MissionStateEstimate mse)
     {
         JSONObject o = new JSONObject();
-        o.put("header", convertHeaderToJSON(mse.getHeader()));
+        o.put("timeStamp", mse.getTimeStamp());
         o.put("srcVehicleId", mse.getSrcVehicleId());
         o.put("connections", convertConnectionsToJSON(mse.getConnections()));
         o.put("locations", convertLocationListToJSON(mse.getLocations()));
@@ -50,14 +53,9 @@ public class MseConverterImpl implements MseConverter
         return o;
     }
 
-    @Override
-    public JSONObject convertHeaderToJSON(Header header)
-    {
-        JSONObject o = new JSONObject();
-        o.put("stamp", convertStampToJSON(header.getStamp()));
-        return o;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONArray convertConnectionsToJSON(List<Connectivity> connections)
     {
@@ -69,6 +67,9 @@ public class MseConverterImpl implements MseConverter
         return a;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertConnectivityToJSON(Connectivity c)
     {
@@ -76,10 +77,13 @@ public class MseConverterImpl implements MseConverter
         o.put("dstVehicleId", c.getDstVehicleId());
         o.put("srcVehicleId", c.getSrcVehicleId());
         o.put("type", c.getType());
-        o.put("stamp", convertStampToJSON(c.getStamp()));
+        o.put("timeStamp", c.getTimeStamp());
         return o;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONArray convertLocationListToJSON(List<Location> locations)
     {
@@ -91,6 +95,9 @@ public class MseConverterImpl implements MseConverter
         return a;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertLocationToJSON(Location location)
     {
@@ -99,10 +106,13 @@ public class MseConverterImpl implements MseConverter
         o.put("minimumAltitude", location.getMinimumAltitude());
         o.put("maximumAltitude", location.getMaximumAltitude());
         o.put("boundaries", convertLatLngListToJSON(location.getBoundaries()));
-        o.put("stamp", convertStampToJSON(location.getStamp()));
+        o.put("timeStamp", location.getTimeStamp());
         return o;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONArray convertTaskListToJSON(List<Task> tasks)
     {
@@ -114,16 +124,26 @@ public class MseConverterImpl implements MseConverter
         return a;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertTaskToJSON(Task task)
     {
         JSONObject o = new JSONObject();
         o.put("taskId", task.getTaskId());
-        o.put("action", task.getAction());
-        o.put("position", convertLatLngAltToJSON(task.getPosition()));
+        o.put("taskType", task.getTaskType());
+        o.put("status", task.getStatus());
+        o.put("creationStamp", task.getCreationStamp());
+        o.put("taskStamp", task.getTaskStamp());
+        o.put("vehicleId", task.getVehicleId());
+        o.put("parameters", task.getParameters());
         return o;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONArray convertVehicleListToJSON(List<Vehicle> vehicles)
     {
@@ -135,6 +155,9 @@ public class MseConverterImpl implements MseConverter
         return a;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertVehicleToJSON(Vehicle vehicle)
     {
@@ -145,19 +168,13 @@ public class MseConverterImpl implements MseConverter
         o.put("position", convertLatLngAltToJSON(vehicle.getPosition()));
         o.put("taskId", vehicle.getTaskId());
         o.put("taskState", vehicle.getTaskState());
-        o.put("stamp", convertStampToJSON(vehicle.getStamp()));
+        o.put("timeStamp", vehicle.getTimeStamp());
         return o;
     }
 
-    @Override
-    public JSONObject convertStampToJSON(Time time)
-    {
-        JSONObject o = new JSONObject();
-        o.put("secs", time.secs);
-        o.put("nsecs", time.nsecs);
-        return o;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONArray convertLatLngListToJSON(List<LatLng> boundaries)
     {
@@ -169,6 +186,9 @@ public class MseConverterImpl implements MseConverter
         return a;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertLatLngToJSON(LatLng position)
     {
@@ -178,6 +198,9 @@ public class MseConverterImpl implements MseConverter
         return o;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JSONObject convertLatLngAltToJSON(LatLngAlt position)
     {

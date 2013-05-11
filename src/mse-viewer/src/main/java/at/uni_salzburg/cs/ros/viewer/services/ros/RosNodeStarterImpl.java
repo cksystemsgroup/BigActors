@@ -33,10 +33,13 @@ import com.google.common.base.Preconditions;
 
 import java.util.Arrays;
 
+/**
+ * RosNodeStarterImpl
+ */
 @EagerLoad
 public class RosNodeStarterImpl implements RosNodeStarter
 {
-    private final Logger LOG = LoggerFactory.getLogger(RosNodeStarterImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RosNodeStarterImpl.class);
 
     private NodeConfiguration nodeConfiguration;
 

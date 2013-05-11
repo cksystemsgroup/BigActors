@@ -109,7 +109,7 @@ public class VehicleDataTestCase
         assertNotNull("Vehicle object", vehicleData.getVehicle());
         assertFalse("Initial state is not busy", vehicleData.isBusy());
         vehicleData.update();
-        verify(logger).info("VehicleData.update()");
+        verify(logger).debug("Waiting for new task.");
         assertFalse("Initial state is not busy", vehicleData.isBusy());
     }
 

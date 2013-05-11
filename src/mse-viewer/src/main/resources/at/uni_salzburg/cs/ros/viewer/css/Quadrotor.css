@@ -23,10 +23,58 @@
 	border: none;
 }
 
-.quadrotor-marker-icon .task_info_none .task_info_other {
+.quadrotor-marker-icon .task_info_none .task_info_todo .task_info_inProgress .task_info_done .task_info_assigned .task_info_cancelled {
 	position: relative;
 	top: 33px;
 	font-size: 12px;
 	width: 25px;
 	text-align: center;
 }
+
+.task_info_none {
+	color: black
+}
+
+.task_info_todo {
+	color: red
+}
+
+.task_info_inProgress {
+	color: blue
+}
+
+.task_info_done {
+	color: green
+}
+
+.task_info_assigned {
+	color: yellow
+}
+
+.task_info_cancelled {
+	color: grey
+}
+
+
+.quadrotor-marker-icon .vehicle_state_none .vehicle_state_idle .vehicle_state_busy {
+	position: relative;
+	top: 40px;
+	font-size: 12px;
+	width: 25px;
+	text-align: center;
+}
+	
+.vehicle_state_none {
+	color: black
+}
+
+.vehicle_state_idle {
+	color: green
+}
+
+.vehicle_state_busy {
+	color: red
+}
+
+
+	

@@ -33,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 /**
@@ -103,7 +104,7 @@ public class Mse
         {
             if (missionStateEstimate == null)
             {
-                return new ByteArrayInputStream("".getBytes());
+                return new ByteArrayInputStream("".getBytes("UTF-8"));
             }
 
             JSONCollection m;
@@ -125,7 +126,8 @@ public class Mse
             }
 
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-            PrintWriter writer = new PrintWriter(out);
+            OutputStreamWriter streamWriter = new OutputStreamWriter(out, "UTF-8");
+            PrintWriter writer = new PrintWriter(streamWriter);
 //            m.print(writer);
             m.prettyPrint(writer);
             writer.close();

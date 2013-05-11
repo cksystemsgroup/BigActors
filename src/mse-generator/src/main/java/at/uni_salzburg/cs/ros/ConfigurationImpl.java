@@ -26,7 +26,6 @@ import big_actor_msgs.LatLngAlt;
 import big_actor_msgs.Location;
 import big_actor_msgs.Vehicle;
 
-import org.ros.message.Time;
 import org.ros.node.ConnectedNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -140,7 +139,7 @@ public class ConfigurationImpl implements Configuration
 
         NamedNodeMap attributes = locationNode.getAttributes();
         location.setLocationId(Integer.parseInt(attributes.getNamedItem("id").getNodeValue()));
-        location.setStamp(Time.fromMillis(Integer.parseInt(attributes.getNamedItem("timeStamp").getNodeValue())));
+        location.setTimeStamp(Integer.parseInt(attributes.getNamedItem("timeStamp").getNodeValue()));
         location.setMaximumAltitude(Float.parseFloat(attributes.getNamedItem("maxAltitude").getNodeValue()));
         location.setMinimumAltitude(Float.parseFloat(attributes.getNamedItem("minAltitude").getNodeValue()));
 

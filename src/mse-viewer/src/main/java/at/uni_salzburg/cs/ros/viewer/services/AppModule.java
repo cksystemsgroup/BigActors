@@ -44,12 +44,18 @@ import java.io.IOException;
  */
 public class AppModule
 {
+    /**
+     * @param binder the service binder
+     */
     public static void bind(ServiceBinder binder)
     {
         binder.bind(RosNodeStarter.class, RosNodeStarterImpl.class);
         binder.bind(MseConverter.class, MseConverterImpl.class);
     }
 
+    /**
+     * @param configuration the mapped configuration
+     */
     public static void contributeFactoryDefaults(
         MappedConfiguration<String, Object> configuration)
     {
@@ -62,12 +68,18 @@ public class AppModule
         configuration.override(SymbolConstants.APPLICATION_VERSION, "at.uni_salzburg.cs.ros.viewer");
     }
 
+    /**
+     * @param configuration the mapped configuration
+     */
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration)
     {
         //        configuration.addInstance("bootstrap", BootstrapStack.class);
         configuration.addInstance("map", MapStack.class);
     }
 
+    /**
+     * @param configuration the mapped configuration
+     */
     public static void contributeApplicationDefaults(
         MappedConfiguration<String, Object> configuration)
     {
@@ -97,6 +109,9 @@ public class AppModule
      * If this method was named "build", then the service id would be taken from the service interface and would be
      * "RequestFilter". Since Tapestry already defines a service named "RequestFilter" we use an explicit service id
      * that we can reference inside the contribution method.
+     * 
+     * @param log the logger instance
+     * @return the request filter
      */
     public RequestFilter buildTimingFilter(final Logger log)
     {
@@ -130,6 +145,9 @@ public class AppModule
      * timing filter. A common use for this kind of filter is transaction management or security. The @Local annotation
      * selects the desired service by type, but only from the same module. Without @Local, there would be an error due
      * to the other service(s) that implement RequestFilter (defined in other modules).
+     * 
+     * @param configuration the ordered configuration
+     * @param filter the request filter
      */
     public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
         @Local RequestFilter filter)
@@ -138,6 +156,6 @@ public class AppModule
         // set constraints to precisely control the invocation order of the contributed filter
         // within the pipeline.
 
-        configuration.add("Timing", filter);
+//        configuration.add("Timing", filter);
     }
 }

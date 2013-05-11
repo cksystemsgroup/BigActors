@@ -32,10 +32,14 @@ public class Index
     @Inject
     private JavaScriptSupport js;
 
+    /**
+     * import the Map JavaScript stack.
+     */
     @SetupRender
-    public void importStack(){
-      js.importStack("map");
-//      js.addScript("alert('bugger-98'); mseViewerInit(); alert('bugger-99');");
-      js.addScript("mseViewerInit();");
-    } 
+    public void importStack()
+    {
+        js.importStack("map");
+        //      js.addScript("alert('bugger-98'); mseViewerInit(); alert('bugger-99');");
+        js.addScript("mseViewerInit();");
+    }
 }

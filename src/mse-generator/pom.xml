@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>at.uni-salzburg.cs</groupId>
 	<artifactId>mse-generator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>MSE Generator</name>
 	<description>MSE Generator</description>
 
@@ -116,5 +116,22 @@
 			</plugin>
 		</plugins>
 	</build>
+
+        <distributionManagement>
+                <site>
+                        <id>${site.deployment.id}</id>
+                        <url>scp://141.201.106.16/home/ckrainer/public_html/site/ese-cpcc</url>
+                </site>
+                <repository>
+                        <id>${site.id}</id>
+                        <name>Inhouse Repository</name>
+                        <url>${inhouse.maven.repository}</url>
+                </repository>
+                <snapshotRepository>
+                        <id>${site.id}</id>
+                        <name>Snapshot Repository</name>
+                        <url>${inhouse_snapshot.maven.repository}</url>
+                </snapshotRepository>
+        </distributionManagement>
 
 </project>

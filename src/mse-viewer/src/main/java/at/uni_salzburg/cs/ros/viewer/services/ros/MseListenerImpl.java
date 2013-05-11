@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 @EagerLoad
 public class MseListenerImpl extends AbstractNodeMain implements MseListener
 {
-    private final Logger LOG = LoggerFactory.getLogger(MseListenerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MseListenerImpl.class);
     
     private big_actor_msgs.MissionStateEstimate message;
 

@@ -29,12 +29,18 @@ import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.StylesheetLink;
 
+/**
+ * BootstrapStack
+ */
 public class BootstrapStack implements JavaScriptStack
 {
     private StylesheetLink[] stylesheets;
 
     private Asset[] javaScriptLibraries;
 
+    /**
+     * @param assetSource the asset source
+     */
     public BootstrapStack(final AssetSource assetSource)
     {
         stylesheets =
@@ -57,22 +63,38 @@ public class BootstrapStack implements JavaScriptStack
             };
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<String> getStacks()
     {
         return Collections.emptyList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Asset> getJavaScriptLibraries()
     {
         return Arrays.asList(javaScriptLibraries);
         //        return Collections.emptyList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<StylesheetLink> getStylesheets()
     {
         return Arrays.asList(stylesheets);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getInitialization()
     {
         return null;

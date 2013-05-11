@@ -89,8 +89,7 @@ public class ConfigTestCase
         assertEquals("Number of locations", 7, config.getLocations().size());
         Location location = config.getLocations().get(0);
         assertEquals("location ID", 1, location.getLocationId());
-        assertEquals("time stamp seconds", 1367162, location.getStamp().secs);
-        assertEquals("time stamp nanoseconds", 195000000, location.getStamp().nsecs);
+        assertEquals("time stamp milliseconds", 1367162195, location.getTimeStamp());
         assertEquals("maximum altitude", 1000.0, location.getMaximumAltitude(), 1E-3);
         assertEquals("minimum altitude", 0.0, location.getMinimumAltitude(), 1E-3);
 
