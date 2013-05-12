@@ -19,6 +19,9 @@
  */
 package at.uni_salzburg.cs.ros.artificer;
 
+import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.WGS84;
 import at.uni_salzburg.cs.ros.Configuration;
 
 import big_actor_msgs.LatLng;
@@ -39,7 +42,8 @@ public class VehicleData implements Updatable
 {
     private static final int MAXIMUM_WAIT_TIME_FOR_NEW_TASK = 15000;
     private static volatile int taskCounter = 0;
-
+    private static final double PI180TH = Math.PI / 180;
+    
     private Vehicle vehicle;
 
     private ConnectedNode node;
@@ -49,7 +53,7 @@ public class VehicleData implements Updatable
     private long startTime;
     private long endTime;
     private boolean busy = false;
-    private float heading = 0;
+    private float newHeading = 0;
     private LatLngAlt currentPosition;
     private Clock clock;
     private double minLat = 90;
@@ -68,6 +72,7 @@ public class VehicleData implements Updatable
     
     private int currentTaskId = 0;
     private int newTaskId = 0;
+    private float heading;
 
     /**
      * @param configuration configuration
@@ -161,18 +166,21 @@ public class VehicleData implements Updatable
             // do nothing, wait for new task.
             node.getLog().debug("Waiting for new task.");
             busy = false;
-            
+
         }
         else if (endTime >= clock.currentTimeMillis())
         {
             busy = true;
             currentTaskId = newTaskId;
-            
+            heading = newHeading;
+
             double completion = 1.0 - (endTime - clock.currentTimeMillis()) / (double) (endTime - startTime);
             CartesianCoordinate cp =
                 distanceVector.multiply(completion * completion * (3 - 2 * completion)).add(cartesianStarPosition);
-            geodeticSystem.rectangularToPolarCoordinates(cp).fill(currentPosition);
-
+            PolarCoordinate pos = geodeticSystem.rectangularToPolarCoordinates(cp);
+            currentPosition.setLatitude(pos.getLatitude());
+            currentPosition.setLongitude(pos.getLongitude());
+            currentPosition.setAltitude(pos.getAltitude());
             node.getLog().info(
                 String.format("VehicleData.update() %f %d %d", completion, (endTime - clock.currentTimeMillis()),
                     (endTime - startTime)));
@@ -181,7 +189,7 @@ public class VehicleData implements Updatable
         {
             newTaskId = incrementTaskCounter();
             currentTaskId = 0;
-            
+
             node.getLog().info("Generate new task. " + newTaskId);
             startPosition = currentPosition;
             startTime = clock.currentTimeMillis() + (long) (MAXIMUM_WAIT_TIME_FOR_NEW_TASK * RandomUtils.nextDouble());
@@ -195,14 +203,37 @@ public class VehicleData implements Updatable
             targetPosition.setLongitude(longitude);
             targetPosition.setAltitude(altitude);
 
-            PolarCoordinate s = new PolarCoordinate(startPosition);
-            PolarCoordinate t = new PolarCoordinate(targetPosition);
+            PolarCoordinate s =
+                new PolarCoordinate(startPosition.getLatitude(), startPosition.getLongitude(),
+                    startPosition.getAltitude());
+
+            PolarCoordinate t =
+                new PolarCoordinate(targetPosition.getLatitude(), targetPosition.getLongitude(),
+                    targetPosition.getAltitude());
 
             cartesianStarPosition = geodeticSystem.polarToRectangularCoordinates(s);
             CartesianCoordinate target = geodeticSystem.polarToRectangularCoordinates(t);
             distanceVector = target.subtract(cartesianStarPosition);
             distance = distanceVector.norm();
             endTime = startTime + (long) (1000 * distance / velocity);
+
+            if (Math.abs(t.getLatitude() - s.getLatitude()) < 1E-6
+                && Math.abs(t.getLongitude() - s.getLongitude()) < 1E-6)
+            {
+                newHeading = 0;
+            }
+            else
+            {
+                newHeading =
+                    (float) Math.atan2((s.getLongitude() - t.getLongitude()) * Math.cos(t.getLatitude() * PI180TH),
+                        t.getLatitude() - s.getLatitude());
+                
+                if (newHeading < 0) {
+                    newHeading += 2 * Math.PI;
+                }
+                
+                newHeading /= PI180TH;
+            }
         }
     }
 
