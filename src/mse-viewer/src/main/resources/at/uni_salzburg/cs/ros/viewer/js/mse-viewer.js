@@ -166,9 +166,10 @@ function updateVehicles(data) {
 			vehicles[id].setLatLng(pos);
 		} else {
 			vehicles[id] = L.quadrotorMarker(pos);
+//			vehicles[id] = L.boatMarker(pos);
 			vehicleLayer.addLayer(vehicles[id]);
 		}
-		vehicles[id].setVehicleState(id, vehicleStateMap[vehicle.vehicleState]);
+		vehicles[id].setVehicleState(id, vehicleStateMap[vehicle.vehicleState], vehicle.heading);
 		vehicles[id].setTaskState(vehicle.taskId, taskStateMap[vehicle.taskState]);
 	}
 

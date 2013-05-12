@@ -49,7 +49,9 @@ public class MapStack implements JavaScriptStack
                 TapestryInternalUtils.assetToStylesheetLink.map(assetSource
                     .getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/css/leaflet-0.5.1.css")),
                 TapestryInternalUtils.assetToStylesheetLink.map(assetSource
-                    .getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/css/Quadrotor.css")),   
+                    .getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/css/Vehicle.css")),   
+//                TapestryInternalUtils.assetToStylesheetLink.map(assetSource
+//                    .getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/css/Quadrotor.css")),
             };
         javaScriptLibraries =
             new Asset[]
@@ -59,6 +61,8 @@ public class MapStack implements JavaScriptStack
                 assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/underscore-1.4.4.min.js"),
 //                assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/backbone-1.0.0.min.js"),
                 assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/Location.js"),
+                assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/Vehicle.js"),
+                assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/Boat.js"),
                 assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/Quadrotor.js"),
                 assetSource.getUnlocalizedAsset("/at/uni_salzburg/cs/ros/viewer/js/mse-viewer.js"),
             };

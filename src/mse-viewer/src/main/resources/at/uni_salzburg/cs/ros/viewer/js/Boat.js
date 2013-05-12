@@ -19,17 +19,17 @@
  */
 
 /*
- * L.QuadrotorMarker is used to display quadrotor UAVs on the map.
+ * L.BoatMarker is used to display boats on the map.
  */
-L.QuadrotorMarker = L.VehicleMarker.extend({
+L.BoatMarker = L.VehicleMarker.extend({
 
 	options : {
-		iconBusyUrl : 'img/QuadrotorBlack_32.png',
-		iconIdleUrl : 'img/QuadrotorGreen_32.png',
+		iconBusyUrl : 'img/BoatBlack_32.png',
+		iconIdleUrl : 'img/BoatGreen_32.png',
 	}
 
 });
 
-L.quadrotorMarker = function (latlng, options) {
-    return new L.QuadrotorMarker(latlng, options);
+L.boatMarker = function (latlng, options) {
+    return new L.BoatMarker(latlng, options);
 };

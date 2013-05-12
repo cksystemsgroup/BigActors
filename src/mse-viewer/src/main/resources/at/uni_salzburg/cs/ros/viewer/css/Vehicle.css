@@ -17,19 +17,73 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+ 
+.vehicle-icon {
+	background: transparent;
+	border: none;
+}
 
-/*
- * L.QuadrotorMarker is used to display quadrotor UAVs on the map.
- */
-L.QuadrotorMarker = L.VehicleMarker.extend({
+.vehicle-marker-icon {
+	position: relative;
+	top: 33px;
+	font-size: 12px;
+	width: 25px;
+	text-align: center;
+}
 
-	options : {
-		iconBusyUrl : 'img/QuadrotorBlack_32.png',
-		iconIdleUrl : 'img/QuadrotorGreen_32.png',
-	}
 
-});
+.vehicle_info {
+	position: relative;
+	top: 10px;
+	font-size: 12px;
+	width: 60px;
+	text-align: left;
+}
+	
+.vehicle_info.none {
+	color: black
+}
 
-L.quadrotorMarker = function (latlng, options) {
-    return new L.QuadrotorMarker(latlng, options);
-};
+.vehicle_info.idle {
+	color: green
+}
+
+.vehicle_info.busy {
+	color: red
+}
+
+
+.task_info {
+	position: relative;
+	top: 10px;
+	font-size: 12px;
+	width: 60px;
+	text-align: left;
+}
+
+.task_info.none {
+	color: black
+}
+
+.task_info.todo {
+	color: red
+}
+
+.task_info.inProgress {
+	color: blue
+}
+
+.task_info.done {
+	color: green
+}
+
+.task_info.assigned {
+	color: yellow
+}
+
+.task_info.cancelled {
+	color: grey
+}
+
+
+	
