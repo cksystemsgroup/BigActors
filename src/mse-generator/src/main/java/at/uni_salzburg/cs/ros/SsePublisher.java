@@ -20,30 +20,36 @@
 package at.uni_salzburg.cs.ros;
 
 import at.uni_salzburg.cs.ros.artificer.Artificer;
-import at.uni_salzburg.cs.ros.artificer.TaskArtificer;
+import at.uni_salzburg.cs.ros.artificer.ConnectionArtificer;
+import at.uni_salzburg.cs.ros.artificer.LocationArtificer;
+import at.uni_salzburg.cs.ros.artificer.VehicleArtificer;
 
 import org.ros.node.topic.Publisher;
 
 import java.util.Arrays;
 
 /**
- * MSE Publisher
+ * SSE Publisher
  */
-public class MsePublisher extends AbstractPublisher
+public class SsePublisher extends AbstractPublisher
 {
-    private Publisher<big_actor_msgs.MissionStateEstimate> publisher;
+    private Publisher<big_actor_msgs.StructureStateEstimate> publisher;
 
-    private TaskArtificer taskArtificer;
+    private ConnectionArtificer connectionArtificer;
+    private LocationArtificer locationArtificer;
+    private VehicleArtificer vehicleArtificer;
 
     /**
      * @param publisher publisher
      * @param configuration configuration
      */
-    public MsePublisher(Publisher<big_actor_msgs.MissionStateEstimate> publisher, Configuration configuration)
+    public SsePublisher(Publisher<big_actor_msgs.StructureStateEstimate> publisher, Configuration configuration)
     {
         this.publisher = publisher;
-        taskArtificer = new TaskArtificer(configuration);
-        setArtificers(Arrays.asList(new Artificer[] {taskArtificer}));
+        connectionArtificer = new ConnectionArtificer(configuration);
+        locationArtificer = new LocationArtificer(configuration);
+        vehicleArtificer = new VehicleArtificer(configuration);
+        setArtificers(Arrays.asList(new Artificer[] {connectionArtificer, locationArtificer, vehicleArtificer}));
         setConfiguration(configuration);
     }
 
@@ -53,13 +59,16 @@ public class MsePublisher extends AbstractPublisher
     @Override
     protected void loop() throws InterruptedException
     {
-        getConfiguration().getNode().getLog().info("MsePublisher.loop()");
-        big_actor_msgs.MissionStateEstimate mse = publisher.newMessage();
+        getConfiguration().getNode().getLog().info("SsePublisher.loop()");
+        big_actor_msgs.StructureStateEstimate mse = publisher.newMessage();
         mse.setTimeStamp(System.currentTimeMillis());
-        mse.setTasks(taskArtificer.currentTasks());
+        mse.setConnections(connectionArtificer.currentConnections());
+        mse.setLocations(locationArtificer.currentLocations());
+        mse.setVehicles(vehicleArtificer.currentVehicles());
         mse.setSrcVehicleId(3);
         publisher.publish(mse);
         Thread.sleep(1000);
     }
+
 
 }

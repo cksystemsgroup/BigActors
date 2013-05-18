@@ -1,5 +1,6 @@
-uint64 srcVehicleId
-uint64 dstVehicleId
+uint64 timeStamp              # Last update timestamp
+uint64 srcVehicleId           # First participating vehicle
+uint64 dstVehicleId           # Second participating vehicle 
 uint8 type
 	uint8 CT_NONE=0
 	uint8 CT_ETHERNET_10M=1
@@ -18,4 +19,3 @@ uint8 type
 	uint8 CT_ACOUSTIC_9kB=31
 	uint8 CT_ACOUSTIC_14kB=32
 	uint8 CT_ACOUSTIC_31kB=33
-uint64 timeStamp

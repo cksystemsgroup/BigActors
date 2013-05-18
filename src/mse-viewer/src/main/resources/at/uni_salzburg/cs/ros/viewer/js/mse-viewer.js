@@ -218,11 +218,11 @@ function mseViewerInit() {
 	
 	L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-	$.getJSON("mse/locations", updateLocations);
-	$.getJSON("mse/vehicles", updateVehicles);
+	$.getJSON("state/locations", updateLocations);
+	$.getJSON("state/vehicles", updateVehicles);
 
-	setInterval('$.getJSON( "mse/locations", updateLocations)', 5000);
-	setInterval('$.getJSON( "mse/vehicles", updateVehicles)', 1000);
+	setInterval('$.getJSON( "state/locations", updateLocations)', 5000);
+	setInterval('$.getJSON( "state/vehicles", updateVehicles)', 1000);
 
 	$(window).resize(_.debounce(adjustMapSize, 500));
 }

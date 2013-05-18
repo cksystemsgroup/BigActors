@@ -118,6 +118,6 @@ L.VehicleMarker = L.Marker.extend({
 });
 
 
-L.quadrotorMarker = function (latlng, options) {
-    return new L.VehicleMarker(latlng, options);
-};
+//L.quadrotorMarker = function (latlng, options) {
+//    return new L.VehicleMarker(latlng, options);
+//};

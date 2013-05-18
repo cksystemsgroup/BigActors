@@ -19,23 +19,15 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
+import big_actor_msgs.StructureStateEstimate;
+
 /**
- * RosNodeStarter
+ * SseListener
  */
-public interface RosNodeStarter
+public interface SseListener
 {
     /**
-     * shutdown all ROS nodes.
+     * @return the current structure state estimate.
      */
-    void shutdown();
-    
-    /**
-     * @return the current <code>MseListener</code> instance.
-     */
-    MseListener getMseListener();
-    
-    /**
-     * @return the current <code>SseListener</code> instance.
-     */
-    SseListener getSseListener();
+    StructureStateEstimate getMessage();
 }

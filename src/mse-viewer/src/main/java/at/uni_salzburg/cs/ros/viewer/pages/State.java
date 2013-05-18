@@ -19,10 +19,11 @@
  */
 package at.uni_salzburg.cs.ros.viewer.pages;
 
-import at.uni_salzburg.cs.ros.viewer.services.ros.MseConverter;
+import at.uni_salzburg.cs.ros.viewer.services.ros.JsonConverter;
 import at.uni_salzburg.cs.ros.viewer.services.ros.RosNodeStarter;
 
 import big_actor_msgs.MissionStateEstimate;
+import big_actor_msgs.StructureStateEstimate;
 
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -39,7 +40,7 @@ import java.io.PrintWriter;
 /**
  * MSE page for map updating.
  */
-public class Mse
+public class State
 {
 //    private final Logger LOG = LoggerFactory.getLogger(Mse.class);
 
@@ -47,7 +48,7 @@ public class Mse
     private RosNodeStarter rosNodeStarter;
 
     @Inject
-    private MseConverter mseConverter;
+    private JsonConverter mseConverter;
 
     /**
      * @return the MSE JSON stream response.
@@ -63,7 +64,9 @@ public class Mse
      */
     public StreamResponse onActivate(final String what)
     {
-        return new MseStreamResponse(mseConverter, rosNodeStarter.getMseListener().getMessage(), what);
+        return new MseStreamResponse(mseConverter, rosNodeStarter.getMseListener().getMessage(),
+            rosNodeStarter.getSseListener().getMessage(),
+            what);
     }
 
     /**
@@ -71,19 +74,22 @@ public class Mse
      */
     private static class MseStreamResponse implements StreamResponse
     {
-        private MseConverter mseConverter;
+        private JsonConverter mseConverter;
         private String what;
         private MissionStateEstimate missionStateEstimate;
+        private StructureStateEstimate structureStateEstimate;
         
         /**
          * @param mseConverter the MSE converter.
          * @param missionStateEstimate the MSE.
          * @param what the subset of the MSE to be emitted.
          */
-        public MseStreamResponse(MseConverter mseConverter, MissionStateEstimate missionStateEstimate, String what)
+        public MseStreamResponse(JsonConverter mseConverter, MissionStateEstimate missionStateEstimate, 
+            StructureStateEstimate structureStateEstimate, String what)
         {
             this.mseConverter = mseConverter;
             this.missionStateEstimate = missionStateEstimate;
+            this.structureStateEstimate = structureStateEstimate;
             this.what = what;
         }
 
@@ -110,19 +116,19 @@ public class Mse
             JSONCollection m;
             if (what == null)
             {
-                m = mseConverter.convertMseToJSON(missionStateEstimate);
+                m = mseConverter.convertMseAndSseToJSON(missionStateEstimate, structureStateEstimate);
             }
             else if ("locations".equals(what))
             {
-                m = mseConverter.convertLocationListToJSON(missionStateEstimate.getLocations());
+                m = mseConverter.convertLocationListToJSON(structureStateEstimate.getLocations());
             }
             else if ("vehicles".equals(what))
             {
-                m = mseConverter.convertVehicleListToJSON(missionStateEstimate.getVehicles());
+                m = mseConverter.convertVehicleListToJSON(structureStateEstimate.getVehicles());
             }
             else
             {
-                m = mseConverter.convertMseToJSON(missionStateEstimate);
+                m = mseConverter.convertMseAndSseToJSON(missionStateEstimate, structureStateEstimate);
             }
 
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);

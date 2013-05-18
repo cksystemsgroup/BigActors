@@ -19,8 +19,8 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services;
 
-import at.uni_salzburg.cs.ros.viewer.services.ros.MseConverter;
-import at.uni_salzburg.cs.ros.viewer.services.ros.MseConverterImpl;
+import at.uni_salzburg.cs.ros.viewer.services.ros.JsonConverter;
+import at.uni_salzburg.cs.ros.viewer.services.ros.JsonConverterImpl;
 import at.uni_salzburg.cs.ros.viewer.services.ros.RosNodeStarter;
 import at.uni_salzburg.cs.ros.viewer.services.ros.RosNodeStarterImpl;
 
@@ -50,7 +50,7 @@ public class AppModule
     public static void bind(ServiceBinder binder)
     {
         binder.bind(RosNodeStarter.class, RosNodeStarterImpl.class);
-        binder.bind(MseConverter.class, MseConverterImpl.class);
+        binder.bind(JsonConverter.class, JsonConverterImpl.class);
     }
 
     /**

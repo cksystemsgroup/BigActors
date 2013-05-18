@@ -24,6 +24,7 @@ import big_actor_msgs.LatLng;
 import big_actor_msgs.LatLngAlt;
 import big_actor_msgs.Location;
 import big_actor_msgs.MissionStateEstimate;
+import big_actor_msgs.StructureStateEstimate;
 import big_actor_msgs.Task;
 import big_actor_msgs.Vehicle;
 
@@ -33,15 +34,16 @@ import org.apache.tapestry5.json.JSONObject;
 import java.util.List;
 
 /**
- * MseConverter
+ * ConvertService
  */
-public interface MseConverter
+public interface JsonConverter
 {
     /**
      * @param mse the mission state estimate
+     * @param sse the structure state estimate
      * @return the created JSON object
      */
-    JSONObject convertMseToJSON(MissionStateEstimate mse);
+    JSONObject convertMseAndSseToJSON(MissionStateEstimate mse, StructureStateEstimate sse);
 
     /**
      * @param connections the connection list

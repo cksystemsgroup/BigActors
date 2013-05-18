@@ -19,49 +19,23 @@
  */
 package at.uni_salzburg.cs.ros;
 
-import at.uni_salzburg.cs.ros.artificer.Clock;
-
-import org.ros.node.ConnectedNode;
-
-import big_actor_msgs.Location;
-import big_actor_msgs.Vehicle;
-
-import java.util.List;
-import java.util.Map;
-
-/**
- * Configuration
- */
-public interface Configuration
+public class LocationSimulationDetails
 {
-    /**
-     * @return the clock implementation.
-     */
-    Clock getClock();
+    private double averageSpeed;
     
     /**
-     * @return the connected node.
+     * @return average speed
      */
-    ConnectedNode getNode();
+    public double getAverageSpeed()
+    {
+        return averageSpeed;
+    }
     
     /**
-     * @return the configured locations.
+     * @param averageSpeed average speed
      */
-    List<Location> getLocations();
-
-    /**
-     * @return location simulation details.
-     */
-    Map<Integer, LocationSimulationDetails> getLocationSimulationDetails();
-
-    /**
-     * @return the configured vehicles.
-     */
-    List<Vehicle> getVehicles();
-
-    /**
-     * @return vehicle simulation details.
-     */
-    Map<Long, VehicleSimulationDetails> getVehicleSimulationDetails();
-
+    public void setAverageSpeed(double averageSpeed)
+    {
+        this.averageSpeed = averageSpeed;
+    }
 }

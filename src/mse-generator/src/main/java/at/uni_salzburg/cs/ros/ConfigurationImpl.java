@@ -36,13 +36,15 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * Configuration
+ * Configuration Implementation
  */
 public class ConfigurationImpl implements Configuration
 {
@@ -51,8 +53,12 @@ public class ConfigurationImpl implements Configuration
     private Clock clock;
 
     private List<Location> locations;
+    
+    private Map<Integer,LocationSimulationDetails> locationSimulationDetails;
 
     private List<Vehicle> vehicles;
+    
+    private Map<Long,VehicleSimulationDetails> vehicleSimulationDetails;
 
     /**
      * @param node connected node
@@ -76,6 +82,12 @@ public class ConfigurationImpl implements Configuration
         }
     }
 
+    /**
+     * @param xmlStream xmlStream
+     * @throws SAXException thrown in case of errors
+     * @throws IOException thrown in case of errors
+     * @throws ParserConfigurationException thrown in case of errors
+     */
     private void parseConfigFile(InputStream xmlStream) throws SAXException, IOException, ParserConfigurationException
     {
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
@@ -93,10 +105,16 @@ public class ConfigurationImpl implements Configuration
         }
     }
 
+    /**
+     * @param nodes nodes
+     * @throws IOException thrown in case of errors
+     */
     private void parseConfigNode(NodeList nodes) throws IOException
     {
         locations = new ArrayList<Location>();
+        locationSimulationDetails = new HashMap<Integer, LocationSimulationDetails>();
         vehicles = new ArrayList<Vehicle>();
+        vehicleSimulationDetails = new HashMap<Long, VehicleSimulationDetails>();
         clock = null;
 
         for (int k = 0, l = nodes.getLength(); k < l; ++k)
@@ -120,6 +138,9 @@ public class ConfigurationImpl implements Configuration
         }
     }
 
+    /**
+     * @param locationNodes locationNodes
+     */
     private void parseLocationsNode(NodeList locationNodes)
     {
         for (int k = 0, l = locationNodes.getLength(); k < l; ++k)
@@ -127,13 +148,16 @@ public class ConfigurationImpl implements Configuration
             Node child = locationNodes.item(k);
             if ("location".equals(child.getNodeName()))
             {
-                Location loc = parseOneLocationNode(child);
-                locations.add(loc);
+                parseOneLocationNode(child);
             }
         }
     }
 
-    private Location parseOneLocationNode(Node locationNode)
+    /**
+     * @param locationNode locationNode
+     * @return location
+     */
+    private void parseOneLocationNode(Node locationNode)
     {
         Location location = node.getTopicMessageFactory().newFromType(Location._TYPE);
 
@@ -142,6 +166,7 @@ public class ConfigurationImpl implements Configuration
         location.setTimeStamp(Integer.parseInt(attributes.getNamedItem("timeStamp").getNodeValue()));
         location.setMaximumAltitude(Float.parseFloat(attributes.getNamedItem("maxAltitude").getNodeValue()));
         location.setMinimumAltitude(Float.parseFloat(attributes.getNamedItem("minAltitude").getNodeValue()));
+        location.setLocationType(Byte.parseByte(attributes.getNamedItem("type").getNodeValue()));
 
         List<LatLng> boundaries = new ArrayList<LatLng>();
         for (int k = 0, l = locationNode.getChildNodes().getLength(); k < l; ++k)
@@ -155,9 +180,17 @@ public class ConfigurationImpl implements Configuration
         }
         location.setBoundaries(boundaries);
         
-        return location;
+        LocationSimulationDetails simDetail = new LocationSimulationDetails();
+        simDetail.setAverageSpeed(Double.parseDouble(attributes.getNamedItem("avgSpeed").getNodeValue()));
+        locationSimulationDetails.put(Integer.valueOf(location.getLocationId()), simDetail);
+        
+        locations.add(location);
     }
 
+    /**
+     * @param pointNodes pointNodes
+     * @return boundaries
+     */
     private List<LatLng> parseBoundariesNode(NodeList pointNodes)
     {
         List<LatLng> boundaries = new ArrayList<LatLng>();
@@ -178,6 +211,9 @@ public class ConfigurationImpl implements Configuration
         return boundaries;
     }
 
+    /**
+     * @param vehicleNodes vehicleNodes
+     */
     private void parseVehiclesNode(NodeList vehicleNodes)
     {
         for (int k = 0, l = vehicleNodes.getLength(); k < l; ++k)
@@ -185,19 +221,36 @@ public class ConfigurationImpl implements Configuration
             Node child = vehicleNodes.item(k);
             if ("vehicle".equals(child.getNodeName()))
             {
-                Vehicle vehicle = node.getTopicMessageFactory().newFromType(Vehicle._TYPE);
-                NamedNodeMap attributes = child.getAttributes();
-                vehicle.setVehicleId(Integer.parseInt(attributes.getNamedItem("id").getNodeValue()));
-                LatLngAlt position = node.getTopicMessageFactory().newFromType(LatLngAlt._TYPE);
-                position.setLatitude(Double.parseDouble(attributes.getNamedItem("latitude").getNodeValue()));
-                position.setLongitude(Double.parseDouble(attributes.getNamedItem("longitude").getNodeValue()));
-                position.setAltitude(Double.parseDouble(attributes.getNamedItem("altitude").getNodeValue()));
-                vehicle.setPosition(position);
-                vehicles.add(vehicle);
+                parseOneVehicle(child);
             }
         }
     }
 
+    /**
+     * @param vehicleNode vehicleNode
+     */
+    private void parseOneVehicle(Node vehicleNode)
+    {
+        Vehicle vehicle = node.getTopicMessageFactory().newFromType(Vehicle._TYPE);
+        NamedNodeMap attributes = vehicleNode.getAttributes();
+        vehicle.setVehicleId(Integer.parseInt(attributes.getNamedItem("id").getNodeValue()));
+        LatLngAlt position = node.getTopicMessageFactory().newFromType(LatLngAlt._TYPE);
+        position.setLatitude(Double.parseDouble(attributes.getNamedItem("latitude").getNodeValue()));
+        position.setLongitude(Double.parseDouble(attributes.getNamedItem("longitude").getNodeValue()));
+        position.setAltitude(Double.parseDouble(attributes.getNamedItem("altitude").getNodeValue()));
+        vehicle.setPosition(position);
+        vehicle.setVehicleType(Byte.parseByte(attributes.getNamedItem("type").getNodeValue()));
+        vehicles.add(vehicle);
+
+        VehicleSimulationDetails simDetail = new VehicleSimulationDetails();
+        simDetail.setAverageSpeed(Double.parseDouble(attributes.getNamedItem("avgSpeed").getNodeValue()));
+        vehicleSimulationDetails.put(Long.valueOf(vehicle.getVehicleId()), simDetail);
+    }
+
+    /**
+     * @param clockNode clockNode
+     * @throws IOException thrown in case of errors
+     */
     private void parseClockNode(Node clockNode) throws IOException
     {
         String className = clockNode.getAttributes().getNamedItem("className").getNodeValue();
@@ -247,6 +300,15 @@ public class ConfigurationImpl implements Configuration
     {
         return locations;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Integer, LocationSimulationDetails> getLocationSimulationDetails()
+    {
+        return locationSimulationDetails;
+    }
 
     /**
      * {@inheritDoc}
@@ -255,5 +317,14 @@ public class ConfigurationImpl implements Configuration
     public List<Vehicle> getVehicles()
     {
         return vehicles;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Long, VehicleSimulationDetails> getVehicleSimulationDetails()
+    {
+        return vehicleSimulationDetails;
     }
 }

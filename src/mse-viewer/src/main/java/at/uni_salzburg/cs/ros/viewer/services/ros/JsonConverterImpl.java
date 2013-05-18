@@ -24,6 +24,7 @@ import big_actor_msgs.LatLng;
 import big_actor_msgs.LatLngAlt;
 import big_actor_msgs.Location;
 import big_actor_msgs.MissionStateEstimate;
+import big_actor_msgs.StructureStateEstimate;
 import big_actor_msgs.Task;
 import big_actor_msgs.Vehicle;
 
@@ -35,21 +36,21 @@ import java.util.List;
 /**
  * MseConverterImpl
  */
-public class MseConverterImpl implements MseConverter
+public class JsonConverterImpl implements JsonConverter
 {
     /**
      * {@inheritDoc}
      */
     @Override
-    public JSONObject convertMseToJSON(MissionStateEstimate mse)
+    public JSONObject convertMseAndSseToJSON(MissionStateEstimate mse, StructureStateEstimate sse)
     {
         JSONObject o = new JSONObject();
         o.put("timeStamp", mse.getTimeStamp());
         o.put("srcVehicleId", mse.getSrcVehicleId());
-        o.put("connections", convertConnectionsToJSON(mse.getConnections()));
-        o.put("locations", convertLocationListToJSON(mse.getLocations()));
+        o.put("connections", convertConnectionsToJSON(sse.getConnections()));
+        o.put("locations", convertLocationListToJSON(sse.getLocations()));
         o.put("tasks", convertTaskListToJSON(mse.getTasks()));
-        o.put("vehicles", convertVehicleListToJSON(mse.getVehicles()));
+        o.put("vehicles", convertVehicleListToJSON(sse.getVehicles()));
         return o;
     }
 

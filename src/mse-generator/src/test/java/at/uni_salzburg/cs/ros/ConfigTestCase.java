@@ -42,7 +42,9 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -92,7 +94,12 @@ public class ConfigTestCase
         assertEquals("time stamp milliseconds", 1367162195, location.getTimeStamp());
         assertEquals("maximum altitude", 1000.0, location.getMaximumAltitude(), 1E-3);
         assertEquals("minimum altitude", 0.0, location.getMinimumAltitude(), 1E-3);
-
+        assertEquals("location type", 3, location.getLocationType());
+        Map<Integer, LocationSimulationDetails> locSimDetails = config.getLocationSimulationDetails();
+        LocationSimulationDetails lsDetail = locSimDetails.get(Integer.valueOf(location.getLocationId()));
+        assertNotNull("LocationSimulationDetails is null", lsDetail);
+        assertEquals("AverageSpeed", 0.1, lsDetail.getAverageSpeed(),1E-7);
+        
         List<LatLng> boundaries = location.getBoundaries();
         assertEquals("number of boundary points", 7, boundaries.size());
         assertEquals("boundary 0 latitude", 47.69243237, boundaries.get(0).getLatitude(), 1E-8);
@@ -106,6 +113,11 @@ public class ConfigTestCase
         assertEquals("vehicle 0 latitude", 47.69243237, vehicle.getPosition().getLatitude(), 1E-8);
         assertEquals("vehicle 0 longitude", 13.38692824, vehicle.getPosition().getLongitude(), 1E-8);
         assertEquals("vehicle 0 altitude", 20.0, vehicle.getPosition().getAltitude(), 1E-8);
+        
+        Map<Long, VehicleSimulationDetails> vehSimDetails = config.getVehicleSimulationDetails();
+        VehicleSimulationDetails vsDetail = vehSimDetails.get(Long.valueOf(vehicle.getVehicleId()));
+        assertNotNull("VehicleSimulationDetails is null", vsDetail);
+        assertEquals("AverageSpeed", 10.0, vsDetail.getAverageSpeed(),1E-7);
     }
 
     @Test
@@ -170,5 +182,18 @@ public class ConfigTestCase
         assertNotNull("Problems opening " + MSE_GENERATOR_CONFIG_5_BUGGY_CLOCK, xmlStream);
 
         new ConfigurationImpl(node, xmlStream);
+    }
+    
+    @Test
+    public void buggerit()
+    {
+        Integer one = new Integer (1);
+        Integer anotherOne = new Integer(1);
+        
+        Map<Integer,String> numbers = new HashMap<Integer, String>();
+        numbers.put(one,"1");
+        assertEquals("1", numbers.get(one));
+        assertEquals("1", numbers.get(anotherOne));
+        assertEquals("1", numbers.get(Integer.valueOf(1)));
     }
 }

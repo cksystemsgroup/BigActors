@@ -38,12 +38,11 @@ import java.util.Collection;
  * Layout component for pages of application mse-viewer.
  */
 @Exclude(stylesheet = {"core"})
-//@Import(stack = "bootstrap", stylesheet = "layout.css")
 @Import(stylesheet = {
-    "classpath:/com/trsvax/bootstrap/assets/bootstrap/css/bootstrap.css",
-    "classpath:/com/trsvax/bootstrap/assets/bootstrap/css/bootstrap-responsive.css",
-    "layout.css"
-},
+        "classpath:/com/trsvax/bootstrap/assets/bootstrap/css/bootstrap.css",
+        "classpath:/com/trsvax/bootstrap/assets/bootstrap/css/bootstrap-responsive.css",
+        "layout.css"
+    },
     library = {
         "classpath:/com/trsvax/bootstrap/assets/bootstrap/js/bootstrap.js"
     })

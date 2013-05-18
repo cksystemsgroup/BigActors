@@ -26,9 +26,10 @@ add_message_files(
 	LatLngAlt.msg
 	LatLng.msg
 	Location.msg
+	MissionStateEstimate.msg
+	StructureStateEstimate.msg
 	Task.msg
 	Vehicle.msg
-	MissionStateEstimate.msg
 )
 
 ## Generate services in the 'srv' folder

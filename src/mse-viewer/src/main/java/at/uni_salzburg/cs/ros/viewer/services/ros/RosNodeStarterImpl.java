@@ -20,18 +20,15 @@
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.ros.address.InetAddressFactory;
 import org.ros.exception.RosRuntimeException;
-import org.ros.internal.loader.CommandLineLoader;
 import org.ros.node.DefaultNodeMainExecutor;
 import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeMain;
 import org.ros.node.NodeMainExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
-import java.util.Arrays;
+import java.net.URI;
 
 /**
  * RosNodeStarterImpl
@@ -41,15 +38,12 @@ public class RosNodeStarterImpl implements RosNodeStarter
 {
     private static final Logger LOG = LoggerFactory.getLogger(RosNodeStarterImpl.class);
 
-    private NodeConfiguration nodeConfiguration;
-
     private NodeMainExecutor nodeMainExecutor;
 
-    private NodeMain nodeMain;
+    private MseListenerImpl mseListener;
 
-    private String[] nodeNames = {
-        MseListenerImpl.class.getName()
-    };
+    private SseListenerImpl sseListener;
+
 
     /**
      * @throws RosRuntimeException thrown in case of errors.
@@ -57,32 +51,23 @@ public class RosNodeStarterImpl implements RosNodeStarter
     public RosNodeStarterImpl() throws RosRuntimeException
     {
         LOG.info("Initializing RosNodeStarterImpl.");
+        
+        NodeConfiguration nodeConfiguration =
+            NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName(), getMasterUri());
+        
+        mseListener = new MseListenerImpl();
+        sseListener = new SseListenerImpl();
+        
+        DefaultNodeMainExecutor.newDefault().execute(mseListener, nodeConfiguration);
+        DefaultNodeMainExecutor.newDefault().execute(sseListener, nodeConfiguration);
+    }
 
-        CommandLineLoader loader = new CommandLineLoader(Arrays.asList(nodeNames));
-        String nodeClassName = loader.getNodeClassName();
-        LOG.info("Loading node class: %s", loader.getNodeClassName());
-        nodeConfiguration = loader.build();
-
-        try
-        {
-            nodeMain = loader.loadClass(nodeClassName);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new RosRuntimeException("Unable to locate node: " + nodeClassName, e);
-        }
-        catch (InstantiationException e)
-        {
-            throw new RosRuntimeException("Unable to instantiate node: " + nodeClassName, e);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RosRuntimeException("Unable to instantiate node: " + nodeClassName, e);
-        }
-
-        Preconditions.checkState(nodeMain != null);
-        nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
-        nodeMainExecutor.execute(nodeMain, nodeConfiguration);
+    /**
+     * @return master URI
+     */
+    private URI getMasterUri()
+    {
+        return NodeConfiguration.DEFAULT_MASTER_URI;
     }
 
     /**
@@ -100,11 +85,15 @@ public class RosNodeStarterImpl implements RosNodeStarter
     @Override
     public MseListener getMseListener()
     {
-        if (nodeMain instanceof MseListener)
-        {
-            return (MseListener) nodeMain;
-        }
-
-        return null;
+        return mseListener;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SseListener getSseListener()
+    {
+        return sseListener;
     }
 }

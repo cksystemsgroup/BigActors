@@ -1,6 +1,3 @@
-uint64 timeStamp
-uint64 srcVehicleId
-Vehicle[] vehicles
-Connectivity[] connections
-Location[] locations
-Task[] tasks
+uint64 timeStamp              # Last update timestamp
+uint64 srcVehicleId           # Vehicle id of the sending vehicle
+Task[] tasks                  # Current tasks

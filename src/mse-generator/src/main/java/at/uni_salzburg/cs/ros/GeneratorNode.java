@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * MSE Generator ROS node
+ * Generator ROS node
  */
-public class MseGeneratorNode extends AbstractNodeMain
+public class GeneratorNode extends AbstractNodeMain
 {
     private static final String CONFIGURATION_FILE = "mse-generator-config.xml";
 
@@ -41,7 +41,7 @@ public class MseGeneratorNode extends AbstractNodeMain
     @Override
     public GraphName getDefaultNodeName()
     {
-        return GraphName.of("mse_generator");
+        return GraphName.of("generator");
     }
 
     /**
@@ -61,14 +61,19 @@ public class MseGeneratorNode extends AbstractNodeMain
             throw new IllegalArgumentException("Can not load configuration " + CONFIGURATION_FILE, e);
         }
 
-        final Publisher<big_actor_msgs.MissionStateEstimate> publisher =
+        final Publisher<big_actor_msgs.MissionStateEstimate> msePublisher =
             connectedNode.newPublisher("mse", big_actor_msgs.MissionStateEstimate._TYPE);
+        
+        final Publisher<big_actor_msgs.StructureStateEstimate> ssePublisher =
+            connectedNode.newPublisher("sse", big_actor_msgs.StructureStateEstimate._TYPE);
 
-        MsePublisher msePublisher = new MsePublisher(publisher, configuration);
+        GeneratorPublisher publisher = new GeneratorPublisher(configuration);
+        publisher.setMsePublisher(msePublisher);
+        publisher.setSsePublisher(ssePublisher);
+        
+        connectedNode.getLog().info("GeneratorNode.onStart(): Buggerit!");
 
-        connectedNode.getLog().info("MseGeneratorNode.onStart(): Buggerit!");
-
-        connectedNode.executeCancellableLoop(msePublisher);
+        connectedNode.executeCancellableLoop(publisher);
     }
 
     /**
