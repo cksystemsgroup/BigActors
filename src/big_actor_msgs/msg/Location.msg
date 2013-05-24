@@ -9,3 +9,4 @@ uint8 locationType
     uint8 LT_AIR_SPACE=2
     uint8 LT_UNDERWATER=3
     uint8 LT_OIL_SPILL=4
+string name                   # Location name
