@@ -22,9 +22,10 @@ package at.uni_salzburg.cs.ros;
 public class LocationSimulationDetails
 {
     private double averageSpeed;
+    private double mutationSpeed;
     
     /**
-     * @return average speed
+     * @return average speed in meters per second.
      */
     public double getAverageSpeed()
     {
@@ -32,10 +33,26 @@ public class LocationSimulationDetails
     }
     
     /**
-     * @param averageSpeed average speed
+     * @param averageSpeed average speed in meters per second.
      */
     public void setAverageSpeed(double averageSpeed)
     {
         this.averageSpeed = averageSpeed;
+    }
+    
+    /**
+     * @return mutation speed of vertices in meters per second.
+     */
+    public double getMutationSpeed()
+    {
+        return mutationSpeed;
+    }
+    
+    /**
+     * @param mutationSpeed mutation speed of vertices in meters per second.
+     */
+    public void setMutationSpeed(double mutationSpeed)
+    {
+        this.mutationSpeed = mutationSpeed;
     }
 }
