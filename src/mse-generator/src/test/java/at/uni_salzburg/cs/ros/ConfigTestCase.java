@@ -91,6 +91,7 @@ public class ConfigTestCase
         assertEquals("Number of locations", 7, config.getLocations().size());
         Location location = config.getLocations().get(0);
         assertEquals("location ID", 1, location.getLocationId());
+        assertEquals("location name", "one", location.getName());
         assertEquals("time stamp milliseconds", 1367162195, location.getTimeStamp());
         assertEquals("maximum altitude", 1000.0, location.getMaximumAltitude(), 1E-3);
         assertEquals("minimum altitude", 0.0, location.getMinimumAltitude(), 1E-3);
@@ -110,6 +111,7 @@ public class ConfigTestCase
         Vehicle vehicle = vehicles.get(0);
 
         assertEquals("vehicle 0 id", 1, vehicle.getVehicleId());
+        assertEquals("vehicle 0 name", "one", vehicle.getName());
         assertEquals("vehicle 0 latitude", 47.69243237, vehicle.getPosition().getLatitude(), 1E-8);
         assertEquals("vehicle 0 longitude", 13.38692824, vehicle.getPosition().getLongitude(), 1E-8);
         assertEquals("vehicle 0 altitude", 20.0, vehicle.getPosition().getAltitude(), 1E-8);

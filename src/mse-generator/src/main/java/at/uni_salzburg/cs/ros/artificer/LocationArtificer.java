@@ -23,6 +23,7 @@ import at.uni_salzburg.cs.ros.Configuration;
 
 import big_actor_msgs.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,16 +31,30 @@ import java.util.List;
  */
 public class LocationArtificer extends Artificer
 {
-    private Configuration configuration;
+    private List<LocationData> locationData;
 
+    private Configuration configuration;
+    
     /**
      * @param configuration configuration
      */
     public LocationArtificer(Configuration configuration)
     {
         this.configuration = configuration;
+        init();
     }
 
+    private void init()
+    {
+        locationData = new ArrayList<LocationData>();
+
+        for (Location location : configuration.getLocations())
+        {
+            LocationData ld = new LocationData(configuration, location);
+            locationData.add(ld);
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -47,6 +62,11 @@ public class LocationArtificer extends Artificer
     public void execute()
     {
         configuration.getNode().getLog().info("LocationArtificer.execute()");
+        
+        for (LocationData ld : locationData)
+        {
+            ld.update();
+        }
     }
 
     /**
@@ -54,7 +74,14 @@ public class LocationArtificer extends Artificer
      */
     public List<Location> currentLocations()
     {
-        return configuration.getLocations();
+        List<Location> locations = new ArrayList<Location>();
+        
+        for (LocationData ld : locationData)
+        {
+            locations.add(ld.getLocation());
+        }
+        
+        return locations;
     }
 
 }

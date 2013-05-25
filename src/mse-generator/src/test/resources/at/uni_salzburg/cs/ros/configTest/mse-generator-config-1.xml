@@ -1,7 +1,7 @@
 <config>
 	<clock className="at.uni_salzburg.cs.ros.artificer.ClockImpl" />
 	<locations>
-		<location id="1" type="3" avgSpeed="0.1" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="1" name="one" type="3" avgSpeed="0.1" mutRate="9" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69243237" longitude="13.38507593" />
 				<point latitude="47.69243237" longitude="13.38573986" />
@@ -12,7 +12,7 @@
 				<point latitude="47.69243237" longitude="13.38507593" />
 			</boundaries>
 		</location>
-		<location id="2" type="3" avgSpeed="0" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="2" name="two" type="3" avgSpeed="0" mutRate="8" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69296678" longitude="13.38503838" />
 				<point latitude="47.69296678" longitude="13.38573039" />
@@ -23,7 +23,7 @@
 				<point latitude="47.69296678" longitude="13.38503838" />
 			</boundaries>
 		</location>
-		<location id="3" type="3" avgSpeed="0" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="3" name="three" type="3" avgSpeed="0" mutRate="7" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69323399" longitude="13.38599735" />
 				<point latitude="47.69323399" longitude="13.38666128" />
@@ -34,7 +34,7 @@
 				<point latitude="47.69323399" longitude="13.38599735" />
 			</boundaries>
 		</location>
-		<location id="4" type="3" avgSpeed="0" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="4" name="four" type="3" avgSpeed="0" mutRate="6" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69269958" longitude="13.38599735" />
 				<point latitude="47.69269958" longitude="13.38666128" />
@@ -45,7 +45,7 @@
 				<point latitude="47.69269958" longitude="13.38599735" />
 			</boundaries>
 		</location>
-		<location id="5" type="3" avgSpeed="0" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="5" name="five" type="3" avgSpeed="0" mutRate="5" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69216517" longitude="13.38599735" />
 				<point latitude="47.69216517" longitude="13.38666128" />
@@ -56,7 +56,7 @@
 				<point latitude="47.69216517" longitude="13.38599735" />
 			</boundaries>
 		</location>
-		<location id="6" type="2" avgSpeed="0.3" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="6" name="six" type="2" avgSpeed="0.3" mutRate="4" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69296678" longitude="13.38692824" />
 				<point latitude="47.69296678" longitude="13.38758270" />
@@ -67,7 +67,7 @@
 				<point latitude="47.69296678" longitude="13.38692824" />
 			</boundaries>
 		</location>
-		<location id="7" type="1" avgSpeed="0.1" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
+		<location id="7" name="seven" type="1" avgSpeed="0.1" mutRate="3" timeStamp="1367162195" maxAltitude="1000" minAltitude="0">
 			<boundaries>
 				<point latitude="47.69243237" longitude="13.38692824" />
 				<point latitude="47.69243237" longitude="13.38758270" />
@@ -80,10 +80,10 @@
 		</location>
 	</locations>
 	<vehicles>
-		<vehicle id="1" type="1" avgSpeed="10" latitude="47.69243237" longitude="13.38692824" altitude="20" />
-		<vehicle id="2" type="2" avgSpeed="1" latitude="47.69296678" longitude="13.38692824" altitude="20" />
-		<vehicle id="3" type="3" avgSpeed="0.1" latitude="47.69216517" longitude="13.38599735" altitude="20" />
-		<vehicle id="4" type="4" avgSpeed="2" latitude="47.69269958" longitude="13.38599735" altitude="20" />
-		<vehicle id="5" type="5" avgSpeed="0.5" latitude="47.69323399" longitude="13.38599735" altitude="20" />
+		<vehicle id="1" name="one" type="1" avgSpeed="10" latitude="47.69243237" longitude="13.38692824" altitude="20" />
+		<vehicle id="2" name="two" type="2" avgSpeed="1" latitude="47.69296678" longitude="13.38692824" altitude="20" />
+		<vehicle id="3" name="three" type="3" avgSpeed="0.1" latitude="47.69216517" longitude="13.38599735" altitude="20" />
+		<vehicle id="4" name="four" type="4" avgSpeed="2" latitude="47.69269958" longitude="13.38599735" altitude="20" />
+		<vehicle id="5" name="five" type="5" avgSpeed="0.5" latitude="47.69323399" longitude="13.38599735" altitude="20" />
 	</vehicles>
 </config>

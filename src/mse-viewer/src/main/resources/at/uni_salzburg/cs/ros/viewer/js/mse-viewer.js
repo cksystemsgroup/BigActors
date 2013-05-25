@@ -100,6 +100,8 @@ function toLatLngArray(points) {
 
 var firstUpdate = 1;
 
+
+
 function updateLocations(data) {
 	if (!data) {
 		return;
@@ -107,7 +109,7 @@ function updateLocations(data) {
 	
 	var oldLocations = {};
 	for ( var id in locations) {
-		oldLocations[id] = 1;
+		oldLocations[id] = locations[id].timeStamp;
 	}
 	
 	for ( var k = 0, l = data.length; k < l; ++k) {
@@ -115,8 +117,11 @@ function updateLocations(data) {
 		var id = loc.locationId;
 		delete oldLocations[id];
 		if (!locations[id]) {
-			locations[id] = new L.Location(toLatLngArray(loc.boundaries));
+			locations[id] = L.createLocation(loc.locationType, toLatLngArray(loc.boundaries));
+			locations[id].timeStamp = loc.timeStamp;
 			locationLayer.addLayer(locations[id]);
+		} else if (loc.timeStamp > locations[id].timeStamp) {
+			locations[id].setLatLngs(toLatLngArray(loc.boundaries)); 
 		}
 	}
 	
@@ -131,21 +136,8 @@ function updateLocations(data) {
 	}
 }
 
-var t = 0;
-var taskStateMap = {
-	0 : 'none',
-	1 : 'todo',
-	2 : 'inProgress',
-	3 : 'done',
-	4 : 'assigned',
-	5 : 'cancelled'
-};
 
-var vehicleStateMap = {
-	0 : 'none',
-	1 : 'idle',
-	2 : 'busy'
-};
+var t = 0;
 
 function updateVehicles(data) {
 	if (!data) {
@@ -165,12 +157,11 @@ function updateVehicles(data) {
 		if (vehicles[id]) {
 			vehicles[id].setLatLng(pos);
 		} else {
-			vehicles[id] = L.quadrotorMarker(pos);
-//			vehicles[id] = L.boatMarker(pos);
+			vehicles[id] = createVehicle(vehicle.vehicleType, pos);
 			vehicleLayer.addLayer(vehicles[id]);
 		}
-		vehicles[id].setVehicleState(id, vehicleStateMap[vehicle.vehicleState], vehicle.heading);
-		vehicles[id].setTaskState(vehicle.taskId, taskStateMap[vehicle.taskState]);
+		vehicles[id].setVehicleState(id, vehicle.vehicleState, vehicle.heading, vehicle.name);
+		vehicles[id].setTaskState(vehicle.taskId, vehicle.taskState);
 	}
 
 	for ( var id in oldVehicles) {
@@ -226,3 +217,5 @@ function mseViewerInit() {
 
 	$(window).resize(_.debounce(adjustMapSize, 500));
 }
+
+jQuery.error = console.error;

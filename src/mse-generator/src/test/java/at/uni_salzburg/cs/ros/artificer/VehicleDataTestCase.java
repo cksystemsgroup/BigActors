@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 import at.uni_salzburg.cs.ros.Configuration;
+import at.uni_salzburg.cs.ros.VehicleSimulationDetails;
 
 import big_actor_msgs.Vehicle;
 
@@ -41,6 +42,9 @@ import org.ros.message.MessageDefinitionProvider;
 import org.ros.message.MessageFactory;
 import org.ros.node.ConnectedNode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * VehicleDataTestCase
  */
@@ -54,6 +58,7 @@ public class VehicleDataTestCase
     private Long currentTime;
     private Vehicle vehicle;
     private Log logger;
+    private Map<Long, VehicleSimulationDetails> vehicleSimDetails;
 
     @Before
     public void setUp()
@@ -84,11 +89,19 @@ public class VehicleDataTestCase
             }
         });
         
+        vehicle = node.getTopicMessageFactory().newFromType(Vehicle._TYPE);
+        vehicle.setVehicleId(1);
+        vehicleSimDetails = new HashMap<Long, VehicleSimulationDetails>();
+        
+        VehicleSimulationDetails v1details = new VehicleSimulationDetails();
+        v1details.setAverageSpeed(0.1);
+        vehicleSimDetails.put(vehicle.getVehicleId(), v1details );
+        
         configuration = mock(Configuration.class);
         when(configuration.getNode()).thenReturn(node);
         when(configuration.getClock()).thenReturn(clock);
-        
-        vehicle = node.getTopicMessageFactory().newFromType(Vehicle._TYPE);
+        when(configuration.getVehicleSimulationDetails()).thenReturn(vehicleSimDetails);
+
         vehicleData = new VehicleData(configuration, vehicle);
     }
 

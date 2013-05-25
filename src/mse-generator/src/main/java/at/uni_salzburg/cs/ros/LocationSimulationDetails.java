@@ -22,7 +22,11 @@ package at.uni_salzburg.cs.ros;
 public class LocationSimulationDetails
 {
     private double averageSpeed;
-    private double mutationSpeed;
+    private double mutationRate;
+    private double minLatitude;
+    private double maxLatitude;
+    private double minLongitude;
+    private double maxLongitude;
     
     /**
      * @return average speed in meters per second.
@@ -45,14 +49,78 @@ public class LocationSimulationDetails
      */
     public double getMutationSpeed()
     {
-        return mutationSpeed;
+        return mutationRate;
     }
     
     /**
-     * @param mutationSpeed mutation speed of vertices in meters per second.
+     * @param mutationRate mutation speed of vertices in meters per second.
      */
-    public void setMutationSpeed(double mutationSpeed)
+    public void setMutationRate(double mutationRate)
     {
-        this.mutationSpeed = mutationSpeed;
+        this.mutationRate = mutationRate;
+    }
+    
+    /**
+     * @return the minimum latitude
+     */
+    public double getMinLatitude()
+    {
+        return minLatitude;
+    }
+    
+    /**
+     * @param minLatitude the minimum latitude
+     */
+    public void setMinLatitude(double minLatitude)
+    {
+        this.minLatitude = minLatitude;
+    }
+    
+    /**
+     * @return the maximum latitude
+     */
+    public double getMaxLatitude()
+    {
+        return maxLatitude;
+    }
+    
+    /**
+     * @param maxLatitude the maximum latitude
+     */
+    public void setMaxLatitude(double maxLatitude)
+    {
+        this.maxLatitude = maxLatitude;
+    }
+    
+    /**
+     * @return the minimum longitude
+     */
+    public double getMinLongitude()
+    {
+        return minLongitude;
+    }
+    
+    /**
+     * @param minLongitude the minimum longitude
+     */
+    public void setMinLongitude(double minLongitude)
+    {
+        this.minLongitude = minLongitude;
+    }
+    
+    /**
+     * @return the maximum longitude
+     */
+    public double getMaxLongitude()
+    {
+        return maxLongitude;
+    }
+    
+    /**
+     * @param maxLongitude the maximum longitude
+     */
+    public void setMaxLongitude(double maxLongitude)
+    {
+        this.maxLongitude = maxLongitude;
     }
 }

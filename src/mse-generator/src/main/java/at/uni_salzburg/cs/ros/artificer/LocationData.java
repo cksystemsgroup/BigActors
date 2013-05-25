@@ -41,6 +41,10 @@ public class LocationData implements Updatable
     private double headingSouth;
     private double headingEast;
     private double heading;
+    private double minLatitude;
+    private double maxLatitude;
+    private double minLongitude;
+    private double maxLongitude;
     
     private WGS84 geodeticSystem = new WGS84();
     private Clock clock;
@@ -55,8 +59,14 @@ public class LocationData implements Updatable
         this.location = location;
         simDetails = configuration.getLocationSimulationDetails();
         velocity = simDetails.get(location.getLocationId()).getAverageSpeed();
-        mutation  = simDetails.get(location.getLocationId()).getMutationSpeed();
-        moving = Math.abs(velocity) > 1E-4;
+        mutation = simDetails.get(location.getLocationId()).getMutationSpeed();
+        
+        minLatitude = simDetails.get(location.getLocationId()).getMinLatitude();
+        maxLatitude = simDetails.get(location.getLocationId()).getMaxLatitude();
+        minLongitude = simDetails.get(location.getLocationId()).getMinLongitude();
+        maxLongitude = simDetails.get(location.getLocationId()).getMaxLongitude();
+        
+        moving = Math.abs(velocity) > 1E-6 || Math.abs(mutation) > 1E-4;
         heading = RandomUtils.nextDouble() * 2.0 * Math.PI;
         headingSouth = Math.sin(heading) * velocity;
         headingEast = Math.cos(heading) * velocity;
@@ -73,16 +83,53 @@ public class LocationData implements Updatable
             return;
         }
 
-        for (LatLng vertex : location.getBoundaries())
+        int l = location.getBoundaries().size();
+        
+        boolean invertLat = false;
+        boolean invertLon = false;
+        
+        for (int k=1; k < l; ++k)
         {
+            LatLng vertex = location.getBoundaries().get(k);
+            
+            if ((vertex.getLatitude() >= maxLatitude && headingSouth < 0)
+                || (vertex.getLatitude() <= minLatitude && headingSouth > 0))
+            {
+                invertLat = true;
+            }
+            
+            if ((vertex.getLongitude() >= maxLongitude && headingEast > 0)
+                || (vertex.getLongitude() <= minLongitude && headingEast < 0))
+            {
+                invertLon = true;
+            }
+            
             PolarCoordinate pos = new PolarCoordinate(vertex.getLatitude(), vertex.getLongitude(), 0);
-            double x = headingSouth + RandomUtils.nextDouble() * mutation;
-            double y = headingEast + RandomUtils.nextDouble() * mutation;
+            double x = headingSouth + (RandomUtils.nextDouble() - 0.5) * mutation;
+            double y = headingEast + (RandomUtils.nextDouble() - 0.5) * mutation;
             
             PolarCoordinate r = geodeticSystem.walk(pos, x, y, 0);
             
             vertex.setLatitude(r.getLatitude());
             vertex.setLongitude(r.getLongitude());
+        }
+        
+        if (l > 1)
+        {
+            LatLng firstVertex = location.getBoundaries().get(0);
+            LatLng lastVertex = location.getBoundaries().get(l-1);
+            firstVertex.setLatitude(lastVertex.getLatitude());
+            firstVertex.setLongitude(lastVertex.getLongitude());
+        }
+        
+        if (invertLat)
+        {
+            headingSouth *= -1;
+        }
+        
+        if (invertLon)
+        {
+            headingEast *= -1;
         }
         
         location.setTimeStamp(clock.currentTimeMillis());

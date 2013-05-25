@@ -31,13 +31,63 @@ import big_actor_msgs.Vehicle;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * MseConverterImpl
  */
 public class JsonConverterImpl implements JsonConverter
 {
+    @SuppressWarnings("serial")
+    private static final Map<Byte, String> TASK_STATE_MAP = new HashMap<Byte, String>()
+    {
+        {
+            put(big_actor_msgs.Task.TS_NONE, "none");
+            put(big_actor_msgs.Task.TS_TODO, "todo");
+            put(big_actor_msgs.Task.TS_IN_PROGRESS, "inProgress");
+            put(big_actor_msgs.Task.TS_DONE, "done");
+            put(big_actor_msgs.Task.TS_ASSIGNED, "assigned");
+            put(big_actor_msgs.Task.TS_CANCELED, "canceled");
+        }
+    };
+
+    @SuppressWarnings("serial")
+    private static final Map<Byte, String> VEHICLE_STATE_MAP = new HashMap<Byte, String>()
+    {
+        {
+            put(big_actor_msgs.Vehicle.VS_NONE, "none");
+            put(big_actor_msgs.Vehicle.VS_IDLE, "idle");
+            put(big_actor_msgs.Vehicle.VS_BUSY, "busy");
+        }
+    };
+
+    @SuppressWarnings("serial")
+    private static final Map<Byte, String> VEHICLE_TYPE_MAP = new HashMap<Byte, String>()
+    {
+        {
+            put(big_actor_msgs.Vehicle.VT_NONE, "none");
+            put(big_actor_msgs.Vehicle.VT_QUADROTOR, "quadrotor");
+            put(big_actor_msgs.Vehicle.VT_VESSEL, "vessel");
+            put(big_actor_msgs.Vehicle.VT_DRIFTER, "drifter");
+            put(big_actor_msgs.Vehicle.VT_MODEL_AIRPLANE, "modelAirPlane");
+        }
+    };
+
+    @SuppressWarnings("serial")
+    private static final Map<Byte, String> LOCATION_TYPE_MAP = new HashMap<Byte, String>()
+    {
+        {
+            put(big_actor_msgs.Location.LT_NONE, "none");
+            put(big_actor_msgs.Location.LT_SURFACE, "surface");
+            put(big_actor_msgs.Location.LT_AIR_SPACE, "airSpace");
+            put(big_actor_msgs.Location.LT_UNDERWATER, "underWater");
+            put(big_actor_msgs.Location.LT_OIL_SPILL, "oilSpill");
+        }
+    };
+    
+    
     /**
      * {@inheritDoc}
      */
@@ -104,6 +154,8 @@ public class JsonConverterImpl implements JsonConverter
     {
         JSONObject o = new JSONObject();
         o.put("locationId", location.getLocationId());
+        o.put("name", location.getName());
+        o.put("locationType", LOCATION_TYPE_MAP.get(location.getLocationType()));
         o.put("minimumAltitude", location.getMinimumAltitude());
         o.put("maximumAltitude", location.getMaximumAltitude());
         o.put("boundaries", convertLatLngListToJSON(location.getBoundaries()));
@@ -134,7 +186,7 @@ public class JsonConverterImpl implements JsonConverter
         JSONObject o = new JSONObject();
         o.put("taskId", task.getTaskId());
         o.put("taskType", task.getTaskType());
-        o.put("status", task.getStatus());
+        o.put("status", TASK_STATE_MAP.get(task.getStatus()));
         o.put("creationStamp", task.getCreationStamp());
         o.put("taskStamp", task.getTaskStamp());
         o.put("vehicleId", task.getVehicleId());
@@ -164,7 +216,9 @@ public class JsonConverterImpl implements JsonConverter
     {
         JSONObject o = new JSONObject();
         o.put("vehicleId", vehicle.getVehicleId());
-        o.put("vehicleState", vehicle.getVehicleState());
+        o.put("name", vehicle.getName());
+        o.put("vehicleState", VEHICLE_STATE_MAP.get(vehicle.getVehicleState()));
+        o.put("vehicleType", VEHICLE_TYPE_MAP.get(vehicle.getVehicleType()));
         o.put("heading", vehicle.getHeading());
         o.put("position", convertLatLngAltToJSON(vehicle.getPosition()));
         o.put("taskId", vehicle.getTaskId());

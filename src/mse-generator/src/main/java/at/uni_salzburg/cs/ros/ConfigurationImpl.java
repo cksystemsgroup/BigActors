@@ -163,10 +163,16 @@ public class ConfigurationImpl implements Configuration
 
         NamedNodeMap attributes = locationNode.getAttributes();
         location.setLocationId(Integer.parseInt(attributes.getNamedItem("id").getNodeValue()));
+        location.setName(attributes.getNamedItem("name").getNodeValue());
         location.setTimeStamp(Integer.parseInt(attributes.getNamedItem("timeStamp").getNodeValue()));
         location.setMaximumAltitude(Float.parseFloat(attributes.getNamedItem("maxAltitude").getNodeValue()));
         location.setMinimumAltitude(Float.parseFloat(attributes.getNamedItem("minAltitude").getNodeValue()));
         location.setLocationType(Byte.parseByte(attributes.getNamedItem("type").getNodeValue()));
+
+        LocationSimulationDetails simDetail = new LocationSimulationDetails();
+        simDetail.setAverageSpeed(Double.parseDouble(attributes.getNamedItem("avgSpeed").getNodeValue()));
+        simDetail.setMutationRate(Double.parseDouble(attributes.getNamedItem("mutRate").getNodeValue()));
+        locationSimulationDetails.put(Integer.valueOf(location.getLocationId()), simDetail);
 
         List<LatLng> boundaries = new ArrayList<LatLng>();
         for (int k = 0, l = locationNode.getChildNodes().getLength(); k < l; ++k)
@@ -177,14 +183,40 @@ public class ConfigurationImpl implements Configuration
                 List<LatLng> bnds = parseBoundariesNode(child.getChildNodes());
                 boundaries.addAll(bnds);
             }
+            else if ("limits".equals(child.getNodeName()))
+            {
+                parseLimitsNode(simDetail, child.getChildNodes());
+            }
         }
         location.setBoundaries(boundaries);
-        
-        LocationSimulationDetails simDetail = new LocationSimulationDetails();
-        simDetail.setAverageSpeed(Double.parseDouble(attributes.getNamedItem("avgSpeed").getNodeValue()));
-        locationSimulationDetails.put(Integer.valueOf(location.getLocationId()), simDetail);
-        
+
         locations.add(location);
+    }
+
+    /**
+     * @param simDetail the location simulation details
+     * @param nodes the nodes to be parsed
+     */
+    private void parseLimitsNode(LocationSimulationDetails simDetail, NodeList nodes)
+    {
+        for (int k = 0, l = nodes.getLength(); k < l; ++k)
+        {
+            Node child = nodes.item(k);
+            if ("latitude".equals(child.getNodeName()))
+            {
+                String mn = child.getAttributes().getNamedItem("min").getNodeValue();
+                String mx = child.getAttributes().getNamedItem("max").getNodeValue();
+                simDetail.setMinLatitude(Double.parseDouble(mn));
+                simDetail.setMaxLatitude(Double.parseDouble(mx));
+            }
+            else if ("longitude".equals(child.getNodeName()))
+            {
+                String mn = child.getAttributes().getNamedItem("min").getNodeValue();
+                String mx = child.getAttributes().getNamedItem("max").getNodeValue();
+                simDetail.setMinLongitude(Double.parseDouble(mn));
+                simDetail.setMaxLongitude(Double.parseDouble(mx));
+            }
+        }
     }
 
     /**
@@ -234,6 +266,7 @@ public class ConfigurationImpl implements Configuration
         Vehicle vehicle = node.getTopicMessageFactory().newFromType(Vehicle._TYPE);
         NamedNodeMap attributes = vehicleNode.getAttributes();
         vehicle.setVehicleId(Integer.parseInt(attributes.getNamedItem("id").getNodeValue()));
+        vehicle.setName(attributes.getNamedItem("name").getNodeValue());
         LatLngAlt position = node.getTopicMessageFactory().newFromType(LatLngAlt._TYPE);
         position.setLatitude(Double.parseDouble(attributes.getNamedItem("latitude").getNodeValue()));
         position.setLongitude(Double.parseDouble(attributes.getNamedItem("longitude").getNodeValue()));

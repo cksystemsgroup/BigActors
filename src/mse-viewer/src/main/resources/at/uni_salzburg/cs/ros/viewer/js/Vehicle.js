@@ -36,6 +36,7 @@ L.VehicleIcon = L.Icon.extend({
 	vehicleId : '',
 	vehicleState : '',
 	vehicleHeading : 0,
+	vehicleName : '',
 	
 	createIcon : function() {
 		var div = document.createElement('div');
@@ -64,12 +65,16 @@ L.VehicleIcon = L.Icon.extend({
 		}
 	},
 	
-	setVehicleState : function(vehicleId, vehicleState, vehicleHeading) {
-		if (this.vehicleId != vehicleId || this.vehicleState != vehicleState || this.vehicleHeading != vehicleHeading) {
+	setVehicleState : function(vehicleId, vehicleState, vehicleHeading, vehicleName) {
+		if (this.vehicleId != vehicleId || this.vehicleState != vehicleState || this.vehicleHeading != vehicleHeading
+				|| this.vehicleName != vehicleName)
+		{
 			this.vehicleId = vehicleId;
+			this.vehicleName = vehicleName;
 			this.vehicleState = vehicleState;
 			this.vehicleHeading = vehicleHeading;
-			this.vehicleDiv.innerHTML = 'v: ' + (vehicleId || '??') + ' h: ' + Number(vehicleHeading).toFixed();
+			this.vehicleDiv.innerHTML = 'v: ' + vehicleName + ' (' + (vehicleId || '??') + ') <br/>h: '
+				+ Number(vehicleHeading).toFixed();
 			this.vehicleDiv.className = 'vehicle_info ' + vehicleState;
 			this.img.style.transform = 'rotate('+(270-vehicleHeading)+'deg)';
 			this.img.style['-ms-transform'] = 'rotate('+(270-vehicleHeading)+'deg)';
@@ -80,7 +85,7 @@ L.VehicleIcon = L.Icon.extend({
 
 
 /*
- * L.VehicleMarker is used to display quadrotor UAVs on the map.
+ * L.VehicleMarker is used to display generic vehicles on the map.
  */
 L.VehicleMarker = L.Marker.extend({
 
@@ -95,7 +100,7 @@ L.VehicleMarker = L.Marker.extend({
 	vehicleId : '',
 	vehicleState : '',
 
-	setVehicleState : function(id, state, heading) {
+	setVehicleState : function(id, state, heading, name) {
 		if (this.vehicleId != id || this.vehicleState != state) {
 			this.vehicleId = id;
 			this.vehicleState = state;
@@ -104,7 +109,7 @@ L.VehicleMarker = L.Marker.extend({
 			} else {
 				this.setIcon(new L.VehicleIcon({iconUrl : this.options.iconBusyUrl}));
 			}
-			this.options.icon.setVehicleState(id, state, heading);
+			this.options.icon.setVehicleState(id, state, heading, name);
 		}		
 		
 		return this;
@@ -117,7 +122,79 @@ L.VehicleMarker = L.Marker.extend({
 
 });
 
+/*
+ * L.QuadrotorMarker is used to display quadrotor UAVs on the map. 
+ */
+L.QuadrotorMarker = L.VehicleMarker.extend({
 
-//L.quadrotorMarker = function (latlng, options) {
-//    return new L.VehicleMarker(latlng, options);
-//};
+	options : {
+		iconBusyUrl : 'img/QuadrotorBlack_32.png',
+		iconIdleUrl : 'img/QuadrotorGreen_32.png',
+	}
+
+});
+
+
+/*
+ * L.ModelAirPlaneMarker is used to display model air-planes on the map.
+ */
+L.ModelAirPlaneMarker = L.VehicleMarker.extend({
+
+	options : {
+		iconBusyUrl : 'img/ModelAirPlaneBlack_32.png',
+		iconIdleUrl : 'img/ModelAirPlaneGreen_32.png',
+	}
+
+});
+
+
+/*
+ * L.DrifterMarker is used to display drifter buoys on the map.
+ */
+L.DrifterMarker = L.VehicleMarker.extend({
+
+	options : {
+		iconBusyUrl : 'img/DrifterBlack_32.png',
+		iconIdleUrl : 'img/DrifterGreen_32.png',
+	}
+
+});
+
+
+/*
+ * L.BoatMarker is used to display boats on the map.
+ */
+L.BoatMarker = L.VehicleMarker.extend({
+
+	options : {
+		iconBusyUrl : 'img/BoatBlack_32.png',
+		iconIdleUrl : 'img/BoatGreen_32.png',
+	}
+
+});
+
+
+/*
+ * create a vehicle marker
+ */
+function createVehicle(type, pos) {
+	if (type == "quadrotor") {
+		return new L.QuadrotorMarker(pos);
+	}
+	
+	if (type == "vessel") {
+		return new L.BoatMarker(pos);
+	}
+	
+	if (type == "drifter") {
+		return new L.DrifterMarker(pos);
+	}
+	
+	if (type == "modelAirPlane") {
+		return new L.ModelAirPlaneMarker(pos);
+	}
+
+	return new L.VehicleMarker(pos);
+}
+
+

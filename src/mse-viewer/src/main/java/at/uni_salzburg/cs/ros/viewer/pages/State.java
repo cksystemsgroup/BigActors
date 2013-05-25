@@ -38,7 +38,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 /**
- * MSE page for map updating.
+ * State page for map updating.
  */
 public class State
 {
@@ -147,6 +147,7 @@ public class State
         @Override
         public void prepareResponse(final Response response)
         {
+            // intentionally empty.
         }
     }
 }

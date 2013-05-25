@@ -49,7 +49,7 @@ public class VehicleData implements Updatable
     private ConnectedNode node;
     private LatLngAlt startPosition;
     private LatLngAlt targetPosition;
-    private double velocity = 15;
+    private double velocity;
     private long startTime;
     private long endTime;
     private boolean busy = false;
@@ -99,7 +99,7 @@ public class VehicleData implements Updatable
         currentPosition.setLongitude(vehicle.getPosition().getLongitude());
         currentPosition.setAltitude(vehicle.getPosition().getAltitude());
 
-        velocity = 10;
+        velocity = configuration.getVehicleSimulationDetails().get(vehicle.getVehicleId()).getAverageSpeed();
         startTime = clock.currentTimeMillis();
         endTime = clock.currentTimeMillis();
 
