@@ -46,7 +46,7 @@ public class SseListenerImpl extends AbstractNodeMain implements SseListener
     @Override
     public GraphName getDefaultNodeName()
     {
-        return GraphName.of("mse_viewer");
+        return GraphName.of("sse_listener");
     }
 
     /**
@@ -55,7 +55,7 @@ public class SseListenerImpl extends AbstractNodeMain implements SseListener
     @Override
     public void onStart(ConnectedNode connectedNode)
     {
-        LOG.info("MseListenerImpl.onStart()");
+        LOG.info("onStart()");
 
         Subscriber<big_actor_msgs.StructureStateEstimate> subscriber =
             connectedNode.newSubscriber("sse", StructureStateEstimate._TYPE);
@@ -66,7 +66,7 @@ public class SseListenerImpl extends AbstractNodeMain implements SseListener
             public void onNewMessage(StructureStateEstimate newMessage)
             {
                 message = newMessage;
-                LOG.info("SseListenerImpl.onNewMessage() SSE received");
+                LOG.info("onNewMessage() SSE received");
             }
         });
     }

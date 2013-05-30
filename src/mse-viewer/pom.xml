@@ -86,7 +86,7 @@
 
 		<dependency>
 			<groupId>edu.berkeley.eloi</groupId>
-			<artifactId>bigraph-vizualizer</artifactId>
+			<artifactId>bigraph-visualizer</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

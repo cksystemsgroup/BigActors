@@ -19,6 +19,8 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
+import at.uni_salzburg.cs.ros.viewer.services.BigraphArchive;
+
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.ros.address.InetAddressFactory;
 import org.ros.exception.RosRuntimeException;
@@ -50,7 +52,7 @@ public class RosNodeStarterImpl implements RosNodeStarter
     /**
      * @throws RosRuntimeException thrown in case of errors.
      */
-    public RosNodeStarterImpl() throws RosRuntimeException
+    public RosNodeStarterImpl(BigraphArchive archive) throws RosRuntimeException
     {
         LOG.info("Initializing RosNodeStarterImpl.");
         
@@ -59,7 +61,7 @@ public class RosNodeStarterImpl implements RosNodeStarter
         
         mseListener = new MseListenerImpl();
         sseListener = new SseListenerImpl();
-        bgmListener = new BgmListenerImpl();
+        bgmListener = new BgmListenerImpl(archive);
         
         DefaultNodeMainExecutor.newDefault().execute(mseListener, nodeConfiguration);
         DefaultNodeMainExecutor.newDefault().execute(sseListener, nodeConfiguration);

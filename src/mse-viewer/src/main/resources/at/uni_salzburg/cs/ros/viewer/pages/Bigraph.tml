@@ -2,8 +2,6 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 	xmlns:p="tapestry:parameter">
 
-<div id="bigraph" class="bigraph">
-	<img src="BigraphImage"/>
-</div>
+<div id="bigraph" class="bigraph"></div>
 
 </html>

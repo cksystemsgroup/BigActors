@@ -46,7 +46,7 @@ public class MseListenerImpl extends AbstractNodeMain implements MseListener
     @Override
     public GraphName getDefaultNodeName()
     {
-        return GraphName.of("mse_viewer");
+        return GraphName.of("mse_listener");
     }
 
     /**
@@ -55,7 +55,7 @@ public class MseListenerImpl extends AbstractNodeMain implements MseListener
     @Override
     public void onStart(ConnectedNode connectedNode)
     {
-        LOG.info("MseListenerImpl.onStart()");
+        LOG.info("onStart()");
 
         Subscriber<big_actor_msgs.MissionStateEstimate> subscriber =
             connectedNode.newSubscriber("mse", MissionStateEstimate._TYPE);
@@ -66,7 +66,7 @@ public class MseListenerImpl extends AbstractNodeMain implements MseListener
             public void onNewMessage(MissionStateEstimate newMessage)
             {
                 message = newMessage;
-                LOG.info("MseListenerImpl.onNewMessage() MSE received");
+                LOG.info("onNewMessage() MSE received");
             }
         });
     }
