@@ -1,4 +1,4 @@
-uint64 timeStamp              # Last update timestamp
+uint64 timeStamp              # Last update timestamp in milliseconds since the Epoch (1970-01-01 00:00:00.000 UTC).
 uint64 vehicleId              # Unique vehicle id
 LatLngAlt position            # Vehicle position
 float32 heading               # Vehicle heading

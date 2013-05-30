@@ -134,8 +134,8 @@ public class State
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
             OutputStreamWriter streamWriter = new OutputStreamWriter(out, "UTF-8");
             PrintWriter writer = new PrintWriter(streamWriter);
-//            m.print(writer);
-            m.prettyPrint(writer);
+            m.print(writer);
+            //m.prettyPrint(writer);
             writer.close();
             out.close();
             return new ByteArrayInputStream(out.toByteArray());

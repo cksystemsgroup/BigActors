@@ -52,6 +52,7 @@ public class AppModule
         binder.bind(RosNodeStarter.class, RosNodeStarterImpl.class);
         binder.bind(JsonConverter.class, JsonConverterImpl.class);
         binder.bind(BigraphImageRenderer.class, BigraphImageRendererImpl.class);
+        binder.bind(BigraphArchive.class, BigraphArchiveImpl.class);
     }
 
     /**
@@ -76,6 +77,7 @@ public class AppModule
     {
         //        configuration.addInstance("bootstrap", BootstrapStack.class);
         configuration.addInstance("map", MapStack.class);
+        configuration.addInstance("bigraph", BigraphStack.class);
     }
 
     /**

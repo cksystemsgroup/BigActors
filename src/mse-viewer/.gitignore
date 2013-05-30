@@ -5,5 +5,7 @@
 /.settings
 /.tomcatplugin
 /bin
+/bgmArchive
+/buggerit
 /target
 /work

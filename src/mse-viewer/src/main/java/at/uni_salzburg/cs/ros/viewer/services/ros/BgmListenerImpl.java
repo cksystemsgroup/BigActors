@@ -19,6 +19,8 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
+import at.uni_salzburg.cs.ros.viewer.services.BigraphArchive;
+
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
@@ -27,6 +29,8 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.topic.Subscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * BgmListenerImpl
@@ -38,13 +42,20 @@ public class BgmListenerImpl extends AbstractNodeMain implements BgmListener
     
     private std_msgs.String message;
 
+    private BigraphArchive archive;
+    
+    public BgmListenerImpl(BigraphArchive archive)
+    {
+        this.archive = archive;
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public GraphName getDefaultNodeName()
     {
-        return GraphName.of("mse_viewer");
+        return GraphName.of("bgm_listener");
     }
 
     /**
@@ -53,7 +64,7 @@ public class BgmListenerImpl extends AbstractNodeMain implements BgmListener
     @Override
     public void onStart(ConnectedNode connectedNode)
     {
-        LOG.info("BgmListenerImpl.onStart()");
+        LOG.info("onStart()");
 
         Subscriber<std_msgs.String> subscriber =
             connectedNode.newSubscriber("bgm", std_msgs.String._TYPE);
@@ -64,7 +75,15 @@ public class BgmListenerImpl extends AbstractNodeMain implements BgmListener
             public void onNewMessage(std_msgs.String newMessage)
             {
                 message = newMessage;
-                LOG.info("BgmListenerImpl.onNewMessage() BGM received");
+                LOG.info("onNewMessage() BGM received");
+                try
+                {
+                    archive.archive(message.getData());
+                }
+                catch (IOException e)
+                {
+                    LOG.error("Can not archive BGM.", e);
+                }
             }
         });
     }

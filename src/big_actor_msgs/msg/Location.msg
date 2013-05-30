@@ -1,4 +1,4 @@
-uint64 timeStamp              # Last update timestamp
+uint64 timeStamp              # Last update timestamp in milliseconds since the Epoch (1970-01-01 00:00:00.000 UTC).
 uint32 locationId             # Unique location id
 LatLng[] boundaries           # Location vertices (polygon)
 float32 minimumAltitude       # Lower altitude bound of the location
