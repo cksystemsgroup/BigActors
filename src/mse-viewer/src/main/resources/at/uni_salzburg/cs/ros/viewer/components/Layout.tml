@@ -23,7 +23,6 @@
 		</div>
 
 		<div class="container">
-			<!-- <header> <h1>${title}</h1> </header> -->
 			<t:body />
 		</div>
 	</div>

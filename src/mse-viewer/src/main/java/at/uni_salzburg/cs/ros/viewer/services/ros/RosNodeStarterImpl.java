@@ -43,6 +43,8 @@ public class RosNodeStarterImpl implements RosNodeStarter
     private MseListenerImpl mseListener;
 
     private SseListenerImpl sseListener;
+    
+    private BgmListenerImpl bgmListener;
 
 
     /**
@@ -57,9 +59,11 @@ public class RosNodeStarterImpl implements RosNodeStarter
         
         mseListener = new MseListenerImpl();
         sseListener = new SseListenerImpl();
+        bgmListener = new BgmListenerImpl();
         
         DefaultNodeMainExecutor.newDefault().execute(mseListener, nodeConfiguration);
         DefaultNodeMainExecutor.newDefault().execute(sseListener, nodeConfiguration);
+        DefaultNodeMainExecutor.newDefault().execute(bgmListener, nodeConfiguration);
     }
 
     /**
@@ -95,5 +99,14 @@ public class RosNodeStarterImpl implements RosNodeStarter
     public SseListener getSseListener()
     {
         return sseListener;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BgmListener getBgmListener()
+    {
+        return bgmListener;
     }
 }

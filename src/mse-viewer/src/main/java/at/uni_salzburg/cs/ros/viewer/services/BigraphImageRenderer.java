@@ -17,30 +17,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ros.viewer.services.ros;
+package at.uni_salzburg.cs.ros.viewer.services;
 
-/**
- * RosNodeStarter
- */
-public interface RosNodeStarter
+import java.io.IOException;
+
+public interface BigraphImageRenderer
 {
-    /**
-     * shutdown all ROS nodes.
-     */
-    void shutdown();
-    
-    /**
-     * @return the current <code>MseListener</code> instance.
-     */
-    MseListener getMseListener();
-    
-    /**
-     * @return the current <code>SseListener</code> instance.
-     */
-    SseListener getSseListener();
-    
-    /**
-     * @return the current <code>BgmListener</code> instance.
-     */
-    BgmListener getBgmListener();
+    byte[] convertBgmToPng(String bgmString) throws IOException;
 }

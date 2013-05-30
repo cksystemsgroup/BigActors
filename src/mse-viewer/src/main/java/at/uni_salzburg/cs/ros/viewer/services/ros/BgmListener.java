@@ -19,28 +19,15 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
+
 /**
- * RosNodeStarter
+ * MseListener
  */
-public interface RosNodeStarter
+public interface BgmListener
 {
     /**
-     * shutdown all ROS nodes.
+     * @return the current bigraph as a <code>String</code> object.
      */
-    void shutdown();
+    String getBigraphString();
     
-    /**
-     * @return the current <code>MseListener</code> instance.
-     */
-    MseListener getMseListener();
-    
-    /**
-     * @return the current <code>SseListener</code> instance.
-     */
-    SseListener getSseListener();
-    
-    /**
-     * @return the current <code>BgmListener</code> instance.
-     */
-    BgmListener getBgmListener();
 }

@@ -1,7 +1,9 @@
+/*.png
 /.classpath
+/.extract
 /.project
-/.tomcatplugin
 /.settings
+/.tomcatplugin
+/bin
 /target
 /work
-/mse-viewer-1.png

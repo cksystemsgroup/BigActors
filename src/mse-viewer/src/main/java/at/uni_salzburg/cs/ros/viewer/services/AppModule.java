@@ -51,6 +51,7 @@ public class AppModule
     {
         binder.bind(RosNodeStarter.class, RosNodeStarterImpl.class);
         binder.bind(JsonConverter.class, JsonConverterImpl.class);
+        binder.bind(BigraphImageRenderer.class, BigraphImageRendererImpl.class);
     }
 
     /**
