@@ -25,6 +25,9 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,6 +36,8 @@ import java.io.InputStream;
  */
 public class GeneratorNode extends AbstractNodeMain
 {
+    private static final String PROP_CONFIG_FILE_NAME = "mse.generator.config.file";
+    
     private static final String CONFIGURATION_FILE = "mse-generator-config.xml";
 
     /**
@@ -50,7 +55,28 @@ public class GeneratorNode extends AbstractNodeMain
     @Override
     public void onStart(final ConnectedNode connectedNode)
     {
-        InputStream confStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(CONFIGURATION_FILE);
+        InputStream confStream = null;
+        String configFileName = System.getProperty(PROP_CONFIG_FILE_NAME);
+        if (configFileName != null)
+        {
+            File configFile = new File(configFileName);
+            connectedNode.getLog().info("Opening configuration file " + configFileName);
+            try
+            {
+                confStream = new FileInputStream(configFile);
+            }
+            catch (FileNotFoundException e)
+            {
+                connectedNode.getLog().error("Can not read configuration file '" + configFileName +
+                    "', switching to default configuration.");
+            }
+        }
+
+        if (confStream == null)
+        {
+            confStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(CONFIGURATION_FILE);
+        }
+
         final Configuration configuration;
         try
         {
@@ -63,14 +89,14 @@ public class GeneratorNode extends AbstractNodeMain
 
         final Publisher<big_actor_msgs.MissionStateEstimate> msePublisher =
             connectedNode.newPublisher("mse", big_actor_msgs.MissionStateEstimate._TYPE);
-        
+
         final Publisher<big_actor_msgs.StructureStateEstimate> ssePublisher =
             connectedNode.newPublisher("sse", big_actor_msgs.StructureStateEstimate._TYPE);
 
         GeneratorPublisher publisher = new GeneratorPublisher(configuration);
         publisher.setMsePublisher(msePublisher);
         publisher.setSsePublisher(ssePublisher);
-        
+
         connectedNode.getLog().info("GeneratorNode.onStart(): Buggerit!");
 
         connectedNode.executeCancellableLoop(publisher);
