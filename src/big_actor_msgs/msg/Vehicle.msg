@@ -14,4 +14,5 @@ uint8 vehicleType
     uint8 VT_VESSEL=2 
     uint8 VT_DRIFTER=3
     uint8 VT_MODEL_AIRPLANE=4
+    uint8 VT_GROUND_STATION=5
 string name                   # Vehicle name
