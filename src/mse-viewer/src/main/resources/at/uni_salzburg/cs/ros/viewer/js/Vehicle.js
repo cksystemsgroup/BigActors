@@ -175,6 +175,18 @@ L.BoatMarker = L.VehicleMarker.extend({
 
 
 /*
+ * L.GroundStationMarker is used to display ground stations on the map.
+ */
+L.GroundStationMarker = L.VehicleMarker.extend({
+
+	options : {
+		iconBusyUrl : 'img/GroundStationBlack_32.png',
+		iconIdleUrl : 'img/GroundStationGreen_32.png',
+	}
+
+});
+
+/*
  * create a vehicle marker
  */
 function createVehicle(type, pos) {
@@ -194,6 +206,10 @@ function createVehicle(type, pos) {
 		return new L.ModelAirPlaneMarker(pos);
 	}
 
+	if (type == "groundStation") {
+		return new L.GroundStationMarker(pos);
+	}
+	
 	return new L.VehicleMarker(pos);
 }
 

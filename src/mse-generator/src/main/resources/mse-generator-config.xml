@@ -102,5 +102,6 @@
 		<vehicle id="3" name="three" type="2" avgSpeed="3" latitude="47.69216517" longitude="13.38599735" altitude="0" />
 		<vehicle id="4" name="four" type="3" avgSpeed="3" latitude="47.69269958" longitude="13.38599735" altitude="0" />
 		<vehicle id="5" name="five" type="4" avgSpeed="3" latitude="47.69323399" longitude="13.38599735" altitude="0" />
+		<vehicle id="6" name="gsOne" type="5" avgSpeed="0" latitude="47.69197125" longitude="13.38678300" altitude="0" />
 	</vehicles>
 </config>

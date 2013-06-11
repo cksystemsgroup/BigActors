@@ -72,6 +72,7 @@ public class JsonConverterImpl implements JsonConverter
             put(big_actor_msgs.Vehicle.VT_VESSEL, "vessel");
             put(big_actor_msgs.Vehicle.VT_DRIFTER, "drifter");
             put(big_actor_msgs.Vehicle.VT_MODEL_AIRPLANE, "modelAirPlane");
+            put(big_actor_msgs.Vehicle.VT_GROUND_STATION, "groundStation");
         }
     };
 
