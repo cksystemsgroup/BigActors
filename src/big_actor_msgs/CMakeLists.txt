@@ -27,6 +27,7 @@ add_message_files(
 	LatLng.msg
 	Location.msg
 	MissionStateEstimate.msg
+	Network.msg
 	StructureStateEstimate.msg
 	Task.msg
 	Vehicle.msg
