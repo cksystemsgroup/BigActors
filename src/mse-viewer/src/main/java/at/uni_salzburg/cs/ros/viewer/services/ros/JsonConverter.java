@@ -24,6 +24,7 @@ import big_actor_msgs.LatLng;
 import big_actor_msgs.LatLngAlt;
 import big_actor_msgs.Location;
 import big_actor_msgs.MissionStateEstimate;
+import big_actor_msgs.Network;
 import big_actor_msgs.StructureStateEstimate;
 import big_actor_msgs.Task;
 import big_actor_msgs.Vehicle;
@@ -110,4 +111,16 @@ public interface JsonConverter
      * @return the created JSON object 
      */
     JSONObject convertLatLngAltToJSON(LatLngAlt position);
+
+    /**
+     * @param networks the network list
+     * @return the created JSON object
+     */
+    JSONArray convertNetworkListToJSON(List<Network> networks);
+    
+    /**
+     * @param network the network
+     * @return the created JSON object
+     */
+    JSONObject convertNetworkToJSON(Network network);
 }

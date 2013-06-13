@@ -24,6 +24,7 @@ import big_actor_msgs.LatLng;
 import big_actor_msgs.LatLngAlt;
 import big_actor_msgs.Location;
 import big_actor_msgs.MissionStateEstimate;
+import big_actor_msgs.Network;
 import big_actor_msgs.StructureStateEstimate;
 import big_actor_msgs.Task;
 import big_actor_msgs.Vehicle;
@@ -102,6 +103,7 @@ public class JsonConverterImpl implements JsonConverter
         o.put("locations", convertLocationListToJSON(sse.getLocations()));
         o.put("tasks", convertTaskListToJSON(mse.getTasks()));
         o.put("vehicles", convertVehicleListToJSON(sse.getVehicles()));
+        o.put("networks", convertNetworkListToJSON(sse.getNetworks()));
         return o;
     }
 
@@ -128,8 +130,36 @@ public class JsonConverterImpl implements JsonConverter
         JSONObject o = new JSONObject();
         o.put("dstVehicleId", c.getDstVehicleId());
         o.put("srcVehicleId", c.getSrcVehicleId());
-        o.put("type", c.getType());
         o.put("timeStamp", c.getTimeStamp());
+        o.put("network", convertNetworkToJSON(c.getNetwork()));
+        return o;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JSONArray convertNetworkListToJSON(List<Network> networks)
+    {
+        JSONArray a = new JSONArray();
+        for (Network n : networks)
+        {
+            a.put(convertNetworkToJSON(n));
+        }
+        return a;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JSONObject convertNetworkToJSON(Network network)
+    {
+        JSONObject o = new JSONObject();
+        o.put("type", network.getType());
+        o.put("address", network.getAddress());
+        o.put("mask", network.getMask());
+        o.put("timeStamp", network.getTimeStamp());
         return o;
     }
 
