@@ -255,6 +255,7 @@ public class JsonConverterImpl implements JsonConverter
         o.put("taskId", vehicle.getTaskId());
         o.put("taskState", vehicle.getTaskState());
         o.put("timeStamp", vehicle.getTimeStamp());
+        o.put("networks", convertNetworkListToJSON(vehicle.getNetworks()));
         return o;
     }
 

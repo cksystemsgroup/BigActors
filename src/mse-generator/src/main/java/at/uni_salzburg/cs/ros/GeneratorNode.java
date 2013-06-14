@@ -38,6 +38,10 @@ public class GeneratorNode extends AbstractNodeMain
 {
     private static final String PROP_CONFIG_FILE_NAME = "mse.generator.config.file";
     
+    private static final String PROP_CONFIG_GEN_MSE = "generate.mse";
+    
+    private static final String PROP_CONFIG_GEN_SSE = "generate.sse";
+    
     private static final String CONFIGURATION_FILE = "mse-generator-config.xml";
 
     /**
@@ -87,19 +91,35 @@ public class GeneratorNode extends AbstractNodeMain
             throw new IllegalArgumentException("Can not load configuration " + CONFIGURATION_FILE, e);
         }
 
-        final Publisher<big_actor_msgs.MissionStateEstimate> msePublisher =
-            connectedNode.newPublisher("mse", big_actor_msgs.MissionStateEstimate._TYPE);
 
-        final Publisher<big_actor_msgs.StructureStateEstimate> ssePublisher =
-            connectedNode.newPublisher("sse", big_actor_msgs.StructureStateEstimate._TYPE);
-
+        boolean active = false;
         GeneratorPublisher publisher = new GeneratorPublisher(configuration);
-        publisher.setMsePublisher(msePublisher);
-        publisher.setSsePublisher(ssePublisher);
 
-        connectedNode.getLog().info("GeneratorNode.onStart(): Buggerit!");
-
-        connectedNode.executeCancellableLoop(publisher);
+        if ("true".equalsIgnoreCase(System.getProperty(PROP_CONFIG_GEN_MSE, "true")))
+        {
+            final Publisher<big_actor_msgs.MissionStateEstimate> msePublisher =
+                connectedNode.newPublisher("mse", big_actor_msgs.MissionStateEstimate._TYPE);
+            
+            publisher.setMsePublisher(msePublisher);
+            active = true;
+        }
+        
+        if ("true".equalsIgnoreCase(System.getProperty(PROP_CONFIG_GEN_SSE, "true")))
+        {
+            final Publisher<big_actor_msgs.StructureStateEstimate> ssePublisher =
+                connectedNode.newPublisher("sse", big_actor_msgs.StructureStateEstimate._TYPE);
+        
+            publisher.setSsePublisher(ssePublisher);
+            active = true;
+        }
+        
+        if (active)
+        {
+            connectedNode.executeCancellableLoop(publisher);    
+            return;
+        }
+        
+        connectedNode.getLog().error("GeneratorNode.onStart(): Nothing to do, aborting.");
     }
 
     /**

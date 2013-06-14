@@ -16,3 +16,4 @@ uint8 vehicleType
     uint8 VT_MODEL_AIRPLANE=4
     uint8 VT_GROUND_STATION=5
 string name                   # Vehicle name
+Network[] networks            # Networks known to the vehicle.

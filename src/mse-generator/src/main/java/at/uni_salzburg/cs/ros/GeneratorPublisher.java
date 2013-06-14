@@ -95,19 +95,25 @@ public class GeneratorPublisher extends AbstractPublisher
         getConfiguration().getNode().getLog().info("GeneratorPublisher.loop()");
         long vehicleId = getRandomVehicleId();
         
-        big_actor_msgs.MissionStateEstimate mse = msePublisher.newMessage();
-        mse.setTimeStamp(System.currentTimeMillis());
-        mse.setSrcVehicleId(vehicleId);
-        mse.setTasks(taskArtificer.currentTasks());
-        msePublisher.publish(mse);
+        if (msePublisher != null)
+        {
+            big_actor_msgs.MissionStateEstimate mse = msePublisher.newMessage();
+            mse.setTimeStamp(System.currentTimeMillis());
+            mse.setSrcVehicleId(vehicleId);
+            mse.setTasks(taskArtificer.currentTasks());
+            msePublisher.publish(mse);
+        }
         
-        big_actor_msgs.StructureStateEstimate sse = ssePublisher.newMessage();
-        sse.setTimeStamp(System.currentTimeMillis());
-        sse.setSrcVehicleId(vehicleId);
-        sse.setConnections(connectionArtificer.currentConnections());
-        sse.setLocations(locationArtificer.currentLocations());
-        sse.setVehicles(vehicleArtificer.currentVehicles());
-        ssePublisher.publish(sse);
+        if (ssePublisher != null)
+        {
+            big_actor_msgs.StructureStateEstimate sse = ssePublisher.newMessage();
+            sse.setTimeStamp(System.currentTimeMillis());
+            sse.setSrcVehicleId(vehicleId);
+            sse.setConnections(connectionArtificer.currentConnections());
+            sse.setLocations(locationArtificer.currentLocations());
+            sse.setVehicles(vehicleArtificer.currentVehicles());
+            ssePublisher.publish(sse);
+        }
         
         Thread.sleep(1000);
     }
