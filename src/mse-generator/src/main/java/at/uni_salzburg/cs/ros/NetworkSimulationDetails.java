@@ -20,25 +20,42 @@
 package at.uni_salzburg.cs.ros;
 
 /**
- * VehicleSimulationDetails
+ * NetworkSimulationDetails
  */
-public class VehicleSimulationDetails
+public class NetworkSimulationDetails
 {
-    private double averageSpeed;
+    private double radius;
+    private double fluctuation;
     
     /**
-     * @return average speed
+     * @return the radius in meters
      */
-    public double getAverageSpeed()
+    public double getRadius()
     {
-        return averageSpeed;
+        return radius;
     }
     
     /**
-     * @param averageSpeed average speed
+     * @param radius the radius in meters
      */
-    public void setAverageSpeed(double averageSpeed)
+    public void setRadius(double radius)
     {
-        this.averageSpeed = averageSpeed;
+        this.radius = radius;
+    }
+    
+    /**
+     * @return the fluctuation in meters
+     */
+    public double getFluctuation()
+    {
+        return fluctuation;
+    }
+    
+    /**
+     * @param fluctuation the fluctuation in meters
+     */
+    public void setFluctuation(double fluctuation)
+    {
+        this.fluctuation = fluctuation;
     }
 }

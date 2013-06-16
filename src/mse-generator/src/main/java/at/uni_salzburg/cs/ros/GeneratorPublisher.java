@@ -42,25 +42,25 @@ public class GeneratorPublisher extends AbstractPublisher
     private Publisher<big_actor_msgs.StructureStateEstimate> ssePublisher;
     private Publisher<big_actor_msgs.MissionStateEstimate> msePublisher;
     
-    private ConnectionArtificer connectionArtificer;
     private LocationArtificer locationArtificer;
     private VehicleArtificer vehicleArtificer;
+    private ConnectionArtificer connectionArtificer;
     private TaskArtificer taskArtificer;
     private List<Long> vehicleIdList = new ArrayList<Long>();
     
     /**
-     * @param publisher publisher
      * @param configuration configuration
      */
     public GeneratorPublisher(Configuration configuration)
     {
         setConfiguration(configuration);
-        connectionArtificer = new ConnectionArtificer(configuration);
         locationArtificer = new LocationArtificer(configuration);
         vehicleArtificer = new VehicleArtificer(configuration);
+        connectionArtificer = new ConnectionArtificer(configuration);
+        connectionArtificer.setVehicleArtificer(vehicleArtificer);
         taskArtificer = new TaskArtificer(configuration);
 
-        setArtificers(Arrays.asList(new Artificer[]{connectionArtificer, locationArtificer, vehicleArtificer,
+        setArtificers(Arrays.asList(new Artificer[]{locationArtificer, vehicleArtificer, connectionArtificer,
             taskArtificer}));
         
         for (Vehicle v : configuration.getVehicles())
@@ -98,7 +98,7 @@ public class GeneratorPublisher extends AbstractPublisher
         if (msePublisher != null)
         {
             big_actor_msgs.MissionStateEstimate mse = msePublisher.newMessage();
-            mse.setTimeStamp(System.currentTimeMillis());
+            mse.setTimeStamp(getConfiguration().getClock().currentTimeMillis());
             mse.setSrcVehicleId(vehicleId);
             mse.setTasks(taskArtificer.currentTasks());
             msePublisher.publish(mse);
@@ -107,15 +107,15 @@ public class GeneratorPublisher extends AbstractPublisher
         if (ssePublisher != null)
         {
             big_actor_msgs.StructureStateEstimate sse = ssePublisher.newMessage();
-            sse.setTimeStamp(System.currentTimeMillis());
+            sse.setTimeStamp(getConfiguration().getClock().currentTimeMillis());
             sse.setSrcVehicleId(vehicleId);
-            sse.setConnections(connectionArtificer.currentConnections());
             sse.setLocations(locationArtificer.currentLocations());
             sse.setVehicles(vehicleArtificer.currentVehicles());
+            sse.setConnections(connectionArtificer.currentConnections());
             ssePublisher.publish(sse);
         }
         
-        Thread.sleep(1000);
+        Sleeper.sleep(1000);
     }
     
     /**

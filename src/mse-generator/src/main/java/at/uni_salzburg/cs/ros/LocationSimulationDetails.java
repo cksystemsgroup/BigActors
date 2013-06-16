@@ -19,6 +19,9 @@
  */
 package at.uni_salzburg.cs.ros;
 
+/**
+ * LocationSimulationDetails
+ */
 public class LocationSimulationDetails
 {
     private double averageSpeed;

@@ -228,7 +228,8 @@ public class VehicleData implements Updatable
                     (float) Math.atan2((s.getLongitude() - t.getLongitude()) * Math.cos(t.getLatitude() * PI180TH),
                         t.getLatitude() - s.getLatitude());
                 
-                if (newHeading < 0) {
+                if (newHeading < 0)
+                {
                     newHeading += 2 * Math.PI;
                 }
                 
@@ -245,7 +246,8 @@ public class VehicleData implements Updatable
         return busy;
     }
     
-    private int incrementTaskCounter() {
+    private int incrementTaskCounter()
+    {
         synchronized (VehicleData.class)
         {
             ++taskCounter;

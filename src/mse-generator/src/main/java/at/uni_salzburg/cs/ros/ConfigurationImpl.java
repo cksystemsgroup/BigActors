@@ -24,6 +24,7 @@ import at.uni_salzburg.cs.ros.artificer.Clock;
 import big_actor_msgs.LatLng;
 import big_actor_msgs.LatLngAlt;
 import big_actor_msgs.Location;
+import big_actor_msgs.Network;
 import big_actor_msgs.Vehicle;
 
 import org.ros.node.ConnectedNode;
@@ -54,11 +55,15 @@ public class ConfigurationImpl implements Configuration
 
     private List<Location> locations;
     
-    private Map<Integer,LocationSimulationDetails> locationSimulationDetails;
+    private Map<Integer, LocationSimulationDetails> locationSimulationDetails;
 
     private List<Vehicle> vehicles;
     
-    private Map<Long,VehicleSimulationDetails> vehicleSimulationDetails;
+    private Map<Long, VehicleSimulationDetails> vehicleSimulationDetails;
+
+    private List<Network> networks;
+    
+    private Map<Byte, Map<Integer, NetworkSimulationDetails>> networkSimulationDetails;
 
     /**
      * @param node connected node
@@ -79,6 +84,10 @@ public class ConfigurationImpl implements Configuration
         catch (ParserConfigurationException e)
         {
             throw new IOException("ParserConfiguration", e);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new IOException("NumberFormat", e);
         }
     }
 
@@ -115,6 +124,8 @@ public class ConfigurationImpl implements Configuration
         locationSimulationDetails = new HashMap<Integer, LocationSimulationDetails>();
         vehicles = new ArrayList<Vehicle>();
         vehicleSimulationDetails = new HashMap<Long, VehicleSimulationDetails>();
+        networks = new ArrayList<Network>();
+        networkSimulationDetails = new HashMap<Byte, Map<Integer,NetworkSimulationDetails>>();
         clock = null;
 
         for (int k = 0, l = nodes.getLength(); k < l; ++k)
@@ -134,6 +145,11 @@ public class ConfigurationImpl implements Configuration
             else if ("clock".equals(nodeName))
             {
                 parseClockNode(child);
+            }
+            else if ("networks".equals(nodeName))
+            {
+                List<Network> nets = parseNetworksNode(child.getChildNodes());
+                networks.addAll(nets);
             }
         }
     }
@@ -278,6 +294,100 @@ public class ConfigurationImpl implements Configuration
         VehicleSimulationDetails simDetail = new VehicleSimulationDetails();
         simDetail.setAverageSpeed(Double.parseDouble(attributes.getNamedItem("avgSpeed").getNodeValue()));
         vehicleSimulationDetails.put(Long.valueOf(vehicle.getVehicleId()), simDetail);
+        
+        
+        NodeList childs = vehicleNode.getChildNodes();
+        List<Network> vehicleNetworks = new ArrayList<Network>();
+        for (int k=0, l = childs.getLength(); k < l; ++k)
+        {
+            Node child = childs.item(k);
+            if ("networks".equals(child.getNodeName()))
+            {
+                List<Network> nets = parseNetworksNode(child.getChildNodes());
+                vehicleNetworks.addAll(nets);
+            }
+        }
+        vehicle.setNetworks(vehicleNetworks);
+    }
+
+    private List<Network> parseNetworksNode(NodeList networkNodes)
+    {
+        List<Network> netwrks = new ArrayList<Network>();
+        for (int k = 0, l = networkNodes.getLength(); k < l; ++k)
+        {
+            Node child = networkNodes.item(k);
+            if ("network".equals(child.getNodeName()))
+            {
+                Network net = parseOneNetworkNode(child);
+                netwrks.add(net);
+            }
+        }
+
+        return netwrks;
+    }
+
+    private Network parseOneNetworkNode(Node networkNode)
+    {
+        Network network = node.getTopicMessageFactory().newFromType(Network._TYPE);
+        NamedNodeMap attributes = networkNode.getAttributes();
+        
+        Byte networkType = Byte.valueOf(attributes.getNamedItem("type").getNodeValue());
+        network.setType(networkType);
+        
+        int networkAddress = parseInetAddress(attributes.getNamedItem("address"));
+        network.setAddress(networkAddress);
+        network.setMask(parseInetAddress(attributes.getNamedItem("mask")));
+        
+        Node radiusAttr = attributes.getNamedItem("radius");
+        Node fluctuationAttr = attributes.getNamedItem("fluctuation");
+        
+        if (radiusAttr != null || fluctuationAttr != null)
+        {
+            double radius = radiusAttr != null ? Double.parseDouble(radiusAttr.getNodeValue()) : 0.0;
+            double fluctuation = fluctuationAttr != null ? Double.parseDouble(fluctuationAttr.getNodeValue()) : 0.0;
+            
+            NetworkSimulationDetails simDetails = new NetworkSimulationDetails();
+            simDetails.setRadius(radius);
+            simDetails.setFluctuation(fluctuation);
+            
+            Map<Integer, NetworkSimulationDetails> entry = networkSimulationDetails.get(networkType);
+            if (entry == null)
+            {
+                entry = new HashMap<Integer, NetworkSimulationDetails>();
+                networkSimulationDetails.put(networkType, entry);
+            }
+            
+            entry.put(networkAddress, simDetails);
+        }
+        
+        return network;
+    }
+    
+    private int parseInetAddress(Node attribute)
+    {
+        if (attribute == null || attribute.getNodeValue().matches("\\s*"))
+        {
+            return 0;
+        }
+        
+        String value = attribute.getNodeValue();
+        if (value.matches("\\d+"))
+        {
+            return (int)(0xFFFFFFFF & Long.parseLong(value));
+        }
+        
+        if (value.matches("\\d+\\.\\d+\\.\\d+\\.\\d+"))
+        {
+            String[] v = value.split("\\.");
+            long r = Long.parseLong(v[0]) << 24
+                | Long.parseLong(v[1]) << 16
+                | Long.parseLong(v[2]) << 8
+                | Long.parseLong(v[3]);
+            
+            return (int)(0xFFFFFFFF & r);
+        }
+
+        throw new NumberFormatException("Can not parse address " + value);
     }
 
     /**
@@ -359,5 +469,23 @@ public class ConfigurationImpl implements Configuration
     public Map<Long, VehicleSimulationDetails> getVehicleSimulationDetails()
     {
         return vehicleSimulationDetails;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Network> getNetworks()
+    {
+        return networks;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Byte, Map<Integer, NetworkSimulationDetails>> getNetworkSimulationDetails()
+    {
+        return networkSimulationDetails;
     }
 }

@@ -25,6 +25,8 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,6 +59,7 @@ public class GeneratorNode extends AbstractNodeMain
      * {@inheritDoc}
      */
     @Override
+    @SuppressFBWarnings("PATH_TRAVERSAL_IN")
     public void onStart(final ConnectedNode connectedNode)
     {
         InputStream confStream = null;
@@ -71,8 +74,8 @@ public class GeneratorNode extends AbstractNodeMain
             }
             catch (FileNotFoundException e)
             {
-                connectedNode.getLog().error("Can not read configuration file '" + configFileName +
-                    "', switching to default configuration.");
+                connectedNode.getLog().error("Can not read configuration file '" + configFileName
+                    + "', switching to default configuration.");
             }
         }
 

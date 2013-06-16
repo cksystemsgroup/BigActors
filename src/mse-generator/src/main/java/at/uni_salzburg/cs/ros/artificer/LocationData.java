@@ -31,6 +31,9 @@ import java.util.Map;
 import big_actor_msgs.LatLng;
 import big_actor_msgs.Location;
 
+/**
+ * LocationData
+ */
 public class LocationData implements Updatable
 {
     private Location location;

@@ -29,6 +29,7 @@ import at.uni_salzburg.cs.ros.artificer.VehicleData;
 
 import big_actor_msgs.LatLng;
 import big_actor_msgs.Location;
+import big_actor_msgs.Network;
 import big_actor_msgs.Vehicle;
 
 import org.junit.Before;
@@ -107,7 +108,7 @@ public class ConfigTestCase
         assertEquals("boundary 0 longitude", 13.38507593, boundaries.get(0).getLongitude(), 1E-8);
 
         List<Vehicle> vehicles = config.getVehicles();
-        assertEquals("Nubmer of vehicles", 5, vehicles.size());
+        assertEquals("Number of vehicles", 7, vehicles.size());
         Vehicle vehicle = vehicles.get(0);
 
         assertEquals("vehicle 0 id", 1, vehicle.getVehicleId());
@@ -116,10 +117,44 @@ public class ConfigTestCase
         assertEquals("vehicle 0 longitude", 13.38692824, vehicle.getPosition().getLongitude(), 1E-8);
         assertEquals("vehicle 0 altitude", 20.0, vehicle.getPosition().getAltitude(), 1E-8);
         
+        List<Network> vNets = vehicle.getNetworks();
+        assertEquals("vehicle 0 number of networks", 3, vNets.size());
+        
+        assertEquals("vehicle 0 network 1 type", 13, vNets.get(0).getType());
+        assertEquals("vehicle 0 network 1 address", 0x0A0A0C00, vNets.get(0).getAddress());
+        assertEquals("vehicle 0 network 1 mask", 0xFFFFFF00, vNets.get(0).getMask());
+        
+        assertEquals("vehicle 0 network 2 type", 40, vNets.get(1).getType());
+        assertEquals("vehicle 0 network 2 address", 12, vNets.get(1).getAddress());
+        assertEquals("vehicle 0 network 2 mask", 0, vNets.get(1).getMask());
+
+        assertEquals("vehicle 0 network 3 type", 50, vNets.get(2).getType());
+        assertEquals("vehicle 0 network 3 address", 0, vNets.get(2).getAddress());
+        assertEquals("vehicle 0 network 3 mask", 0, vNets.get(2).getMask());
+
+        
         Map<Long, VehicleSimulationDetails> vehSimDetails = config.getVehicleSimulationDetails();
         VehicleSimulationDetails vsDetail = vehSimDetails.get(Long.valueOf(vehicle.getVehicleId()));
         assertNotNull("VehicleSimulationDetails is null", vsDetail);
         assertEquals("AverageSpeed", 10.0, vsDetail.getAverageSpeed(),1E-7);
+        
+        List<Network> networks = config.getNetworks();
+        assertEquals("Number of networks", 5, networks.size());
+        Network network = networks.get(1);
+        
+        assertEquals("Network 1 type", 13, network.getType());
+        assertEquals("Network 1 address", 0x0A0A0C00, network.getAddress());
+        assertEquals("Network 1 mask", 0xFFFFFF00, network.getMask());
+        
+        Map<Byte, Map<Integer, NetworkSimulationDetails>> netTypeSimDetails = config.getNetworkSimulationDetails();
+        assertEquals("Number of network type simulation details", 4, netTypeSimDetails.size());
+        
+        Map<Integer, NetworkSimulationDetails> netSimDetails = netTypeSimDetails.get(network.getType());
+        assertEquals("Number of network simulation details", 2, netSimDetails.size());
+        
+        NetworkSimulationDetails netSimDetail = netSimDetails.get(network.getAddress());
+        assertEquals("Network 1 mask", 100.0, netSimDetail.getRadius(), 1E-6);
+        assertEquals("Network 1 mask", 10.0, netSimDetail.getFluctuation(), 1E-6);
     }
 
     @Test

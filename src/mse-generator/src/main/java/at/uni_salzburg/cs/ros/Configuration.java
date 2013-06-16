@@ -24,6 +24,7 @@ import at.uni_salzburg.cs.ros.artificer.Clock;
 import org.ros.node.ConnectedNode;
 
 import big_actor_msgs.Location;
+import big_actor_msgs.Network;
 import big_actor_msgs.Vehicle;
 
 import java.util.List;
@@ -63,5 +64,15 @@ public interface Configuration
      * @return vehicle simulation details.
      */
     Map<Long, VehicleSimulationDetails> getVehicleSimulationDetails();
+
+    /**
+     * @return the configured networks
+     */
+    List<Network> getNetworks();
+
+    /**
+     * @return network simulation details
+     */
+    Map<Byte, Map<Integer, NetworkSimulationDetails>> getNetworkSimulationDetails();
 
 }
