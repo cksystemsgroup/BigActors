@@ -17,35 +17,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ros.viewer.services.ros;
+package at.uni_salzburg.cs.ros.viewer.services;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
- * RosNodeStarter
+ * BigraphReactionRuleArchive
  */
-public interface RosNodeStarter
+public interface BigraphReactionRuleArchive
 {
     /**
-     * shutdown all ROS nodes.
+     * @param reactionRule the new bigraph reaction rule as a <code>String</code> to be archived.
+     * @throws IOException thrown in case of errors.
      */
-    void shutdown();
-    
+    void archive(String reactionRule) throws IOException;
+
     /**
-     * @return the current <code>MseListener</code> instance.
+     * @return the current reactum image id.
      */
-    MseListener getMseListener();
-    
+    String getCurrentRedexImageId();
+
     /**
-     * @return the current <code>SseListener</code> instance.
+     * @return the current reactum image id.
      */
-    SseListener getSseListener();
-    
+    String getCurrentReactumImageId();
+
     /**
-     * @return the current <code>BgmListener</code> instance.
+     * @param imageId the redex or reactum image identification
+     * @return the requested redex or reactum image or null (if not found).
      */
-    BgmListener getBgmListener();
-    
-    /**
-     * @return the current <code>BrrListener</code> instance.
-     */
-    BrrListener getBrrListener();
+    File getImage(String imageId);
 }

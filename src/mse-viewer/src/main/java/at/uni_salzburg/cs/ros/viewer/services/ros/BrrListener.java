@@ -19,33 +19,15 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
+
 /**
- * RosNodeStarter
+ * BrrListener
  */
-public interface RosNodeStarter
+public interface BrrListener
 {
     /**
-     * shutdown all ROS nodes.
+     * @return the current bigraph reaction rule as a <code>String</code> object.
      */
-    void shutdown();
+    String getBigraphString();
     
-    /**
-     * @return the current <code>MseListener</code> instance.
-     */
-    MseListener getMseListener();
-    
-    /**
-     * @return the current <code>SseListener</code> instance.
-     */
-    SseListener getSseListener();
-    
-    /**
-     * @return the current <code>BgmListener</code> instance.
-     */
-    BgmListener getBgmListener();
-    
-    /**
-     * @return the current <code>BrrListener</code> instance.
-     */
-    BrrListener getBrrListener();
 }

@@ -20,6 +20,7 @@
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
 import at.uni_salzburg.cs.ros.viewer.services.BigraphArchive;
+import at.uni_salzburg.cs.ros.viewer.services.BigraphReactionRuleArchive;
 
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.ros.address.InetAddressFactory;
@@ -47,12 +48,14 @@ public class RosNodeStarterImpl implements RosNodeStarter
     private SseListenerImpl sseListener;
     
     private BgmListenerImpl bgmListener;
+    
+    private BrrListenerImpl brrListener;
 
 
     /**
      * @throws RosRuntimeException thrown in case of errors.
      */
-    public RosNodeStarterImpl(BigraphArchive archive) throws RosRuntimeException
+    public RosNodeStarterImpl(BigraphArchive archive, BigraphReactionRuleArchive brrArchive) throws RosRuntimeException
     {
         LOG.info("Initializing RosNodeStarterImpl.");
         
@@ -62,10 +65,12 @@ public class RosNodeStarterImpl implements RosNodeStarter
         mseListener = new MseListenerImpl();
         sseListener = new SseListenerImpl();
         bgmListener = new BgmListenerImpl(archive);
+        brrListener = new BrrListenerImpl(brrArchive);
         
         DefaultNodeMainExecutor.newDefault().execute(mseListener, nodeConfiguration);
         DefaultNodeMainExecutor.newDefault().execute(sseListener, nodeConfiguration);
         DefaultNodeMainExecutor.newDefault().execute(bgmListener, nodeConfiguration);
+        DefaultNodeMainExecutor.newDefault().execute(brrListener, nodeConfiguration);
     }
 
     /**
@@ -110,5 +115,14 @@ public class RosNodeStarterImpl implements RosNodeStarter
     public BgmListener getBgmListener()
     {
         return bgmListener;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BrrListener getBrrListener()
+    {
+        return brrListener;
     }
 }

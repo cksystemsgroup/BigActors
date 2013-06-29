@@ -53,6 +53,7 @@ public class AppModule
         binder.bind(JsonConverter.class, JsonConverterImpl.class);
         binder.bind(BigraphImageRenderer.class, BigraphImageRendererImpl.class);
         binder.bind(BigraphArchive.class, BigraphArchiveImpl.class);
+        binder.bind(BigraphReactionRuleArchive.class, BigraphReactionRuleArchiveImpl.class);
     }
 
     /**

@@ -80,7 +80,7 @@ public class Layout
 
     public Collection<String> getPageNames()
     {
-        return Arrays.asList("bigraph", "about", "contact");
+        return Arrays.asList("bigraph", "bigraphReactionRule", "about", "contact");
     }
 
     public String getPageLabel()

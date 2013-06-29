@@ -19,7 +19,7 @@
  */
 package at.uni_salzburg.cs.ros.viewer.pages;
 
-import at.uni_salzburg.cs.ros.viewer.services.BigraphArchive;
+import at.uni_salzburg.cs.ros.viewer.services.BigraphReactionRuleArchive;
 import at.uni_salzburg.cs.ros.viewer.services.JSONStreamResponse;
 import at.uni_salzburg.cs.ros.viewer.services.PngImageStreamResponse;
 
@@ -31,10 +31,10 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import java.io.File;
 
-public class Bigraph
+public class BigraphReactionRule
 {
     @Inject
-    private BigraphArchive archive;
+    private BigraphReactionRuleArchive archive;
 
     @Inject
     private JavaScriptSupport js;
@@ -46,26 +46,42 @@ public class Bigraph
     public void importStack()
     {
         js.importStack("bigraph");
-        js.addScript("bup = new BigraphUpdater('bigraph','bigraph');" +
-        	"var cmd = '$.getJSON(\"bigraph/current\", function(data){bup.refresh(data)});';" +	
-            "eval(cmd);" +
-            "setInterval(cmd, 1000);");
+        js.addScript("redex = new BigraphUpdater('bigraphReactionRule','redex');" +
+            "var cmdRedex = '$.getJSON(\"bigraphReactionRule/redex\", function(data){redex.refresh(data)});';" +
+            "eval(cmdRedex);" +
+            "setInterval(cmdRedex, 1000);" +
+            "reactum = new BigraphUpdater('bigraphReactionRule','reactum');" +
+            "var cmdReactum = '$.getJSON(\"bigraphReactionRule/reactum\", function(data){reactum.refresh(data)});';" +
+            "eval(cmdReactum);" +
+            "setInterval(cmdReactum, 1000);");
     }
-    
+
     /**
-     * @return the currently available bigraph as PNG image.
+     * @param command the command
+     * @return the currently available bigraph names as JSON object.
      */
     public StreamResponse onActivate(String command)
     {
-        if ("current".equals(command))
+        if ("redex".equals(command))
         {
-            JSONObject result = new JSONObject().put("img", archive.getCurrentImageId());
+            JSONObject result = new JSONObject().put("img", archive.getCurrentRedexImageId());
+            return new JSONStreamResponse(result);
+        }
+
+        if ("reactum".equals(command))
+        {
+            JSONObject result = new JSONObject().put("img", archive.getCurrentReactumImageId());
             return new JSONStreamResponse(result);
         }
 
         return null;
     }
 
+    /**
+     * @param command the command
+     * @param imageId the image identification
+     * @return the currently available bigraph as PNG image.
+     */
     public StreamResponse onActivate(String command, String imageId)
     {
         if ("img".equals(command))
@@ -76,6 +92,5 @@ public class Bigraph
 
         return new PngImageStreamResponse(new byte[0]);
     }
-
 
 }

@@ -21,7 +21,7 @@ package at.uni_salzburg.cs.ros.viewer.services.ros;
 
 
 /**
- * MseListener
+ * BgmListener
  */
 public interface BgmListener
 {

@@ -1,0 +1,15 @@
+<html t:type="layout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:p="tapestry:parameter">
+
+<div class="row">
+	<table>
+		<tr>
+			<td><div id="redex" class="bigraph"></div></td>
+			<td><i class="icon-arrow-right"></i></td>
+			<td><div id="reactum" class="bigraph"></div></td>
+		</tr>
+	</table>
+</div>
+
+</html>

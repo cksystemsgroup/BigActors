@@ -18,7 +18,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-function BigraphUpdater(bigraphId) {
+function BigraphUpdater(base, bigraphId) {
+	this.base = base;
 	this.bigraphId = bigraphId;
 	this.div = document.getElementById(bigraphId);
 	this.img = document.createElement('img');
@@ -32,5 +33,5 @@ BigraphUpdater.prototype.refresh = function(data) {
 	}
 	
 	this.currentImgName = data.img;
-	this.img.src = 'bigraph/img/' + this.currentImgName;
+	this.img.src = this.base + '/img/' + this.currentImgName;
 }
