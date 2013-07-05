@@ -16,7 +16,7 @@ If you just want to browse the repository, you can do so by going [here](https:/
 Conditions of use
 -----------------
 
-BigActors is distributed under the terms of the [BSD License](https://github.com/cksystemsgroup/BigActors/blob/master/COPYING).
+BigActors is distributed under the terms of the [GNU GPL License](https://github.com/cksystemsgroup/BigActors/blob/master/COPYING).
 
 Bug reporting
 -------------
