@@ -29,7 +29,10 @@
 
 	<div id="footer">
 		<div class="container">
-			<p class="muted credit">&copy; Computational Systems Group, University of Salzburg, Austria.</p>
+			<p class="muted credit">&copy; Computational Systems Group, University of Salzburg, Austria.
+			Research Center, Portuguese Air Force Academy.
+			CPCC Lab, University of California at Berkeley, USA.
+			</p>
 		</div>
 	</div>
 </body>

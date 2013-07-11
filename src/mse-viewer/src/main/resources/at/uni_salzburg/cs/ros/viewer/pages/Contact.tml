@@ -2,6 +2,32 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>Contact at.uni-salzburg.cs ...</p>
+<!--
+	<p>Computational Systems Group, University of Salzburg, Austria. <a href="http://cs.uni-salzburg.at/~ck/">cs.uni-salzburg.at</a></p>
+	
+	<p>Research Center, Portuguese Air Force Academy.</p>
+			
+	<p>CPCC Lab, University of California at Berkeley, USA. <a href="http://cpcc.berkeley.edu">cpcc.berkeley.edu</a></p>
+-->
+	<br/>
+	<p><a href="http://cs.uni-salzburg.at/~ck/">Christoph Kirsch</a><br/>
+		Professor and Chair<br/>
+		Computational Systems Group<br/>
+		Department of Computer Sciences<br/>
+		University of Salzburg, Austria.
+	</p>
+               
+	<p>
+		<a>Lt-Col. José Morgado</a>, PhD<br/>
+		Lieutenant-Colonel at the Portuguese Air Force<br/>
+		Director of the Research Center of the Portuguese Air Force Academy (CIAFA).
+	</p>
+
+	<p>
+		<a href="http://www.ce.berkeley.edu/faculty/faculty.php?name=Sengupta"> Raja Sengupta</a><br/>
+		Associate Professor<br/>
+		CEE: Systems <br/>
+		University of California at Berkeley, USA.
+	</p>
 
 </html>
