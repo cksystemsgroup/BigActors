@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * RosNodeStarterImpl
@@ -40,6 +41,10 @@ import java.net.URI;
 public class RosNodeStarterImpl implements RosNodeStarter
 {
     private static final Logger LOG = LoggerFactory.getLogger(RosNodeStarterImpl.class);
+
+    private static final int MASTER_PORT = 11311;
+
+//    private RosCore rosCore;
 
     private NodeMainExecutor nodeMainExecutor;
 
@@ -58,6 +63,17 @@ public class RosNodeStarterImpl implements RosNodeStarter
     public RosNodeStarterImpl(BigraphArchive archive, BigraphReactionRuleArchive brrArchive) throws RosRuntimeException
     {
         LOG.info("Initializing RosNodeStarterImpl.");
+        
+//        rosCore = RosCore.newPublic(getMasterPort());
+//        rosCore.start();
+//        try
+//        {
+//            rosCore.awaitStart();
+//        }
+//        catch (InterruptedException e)
+//        {
+//            throw new RuntimeException(e);
+//        }
         
         NodeConfiguration nodeConfiguration =
             NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName(), getMasterUri());
@@ -78,7 +94,22 @@ public class RosNodeStarterImpl implements RosNodeStarter
      */
     private URI getMasterUri()
     {
-        return NodeConfiguration.DEFAULT_MASTER_URI;
+        try
+        {
+            return new URI("http", null, "localhost", getMasterPort(), "/", null, null);
+        }
+        catch (URISyntaxException e)
+        {
+            return null;
+        }
+    }
+    
+    /**
+     * @return master port number
+     */
+    private int getMasterPort()
+    {
+        return MASTER_PORT;
     }
 
     /**
@@ -88,6 +119,7 @@ public class RosNodeStarterImpl implements RosNodeStarter
     public void shutdown()
     {
         nodeMainExecutor.shutdown();
+//        rosCore.shutdown();
     }
 
     /**
