@@ -1,5 +1,5 @@
 /*
- * This code is part of the BigActor project.
+ * This code is part of the CPCC-NG project.
  *
  * Copyright (c) 2013 Clemens Krainer <clemens.krainer@gmail.com>
  *

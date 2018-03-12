@@ -19,8 +19,8 @@
  */
 package at.uni_salzburg.cs.ros.viewer.services.ros;
 
-import at.uni_salzburg.cs.ros.viewer.services.BigraphArchive;
-import at.uni_salzburg.cs.ros.viewer.services.BigraphReactionRuleArchive;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.ros.address.InetAddressFactory;
@@ -31,8 +31,8 @@ import org.ros.node.NodeMainExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import at.uni_salzburg.cs.ros.viewer.services.BigraphArchive;
+import at.uni_salzburg.cs.ros.viewer.services.BigraphReactionRuleArchive;
 
 /**
  * RosNodeStarterImpl
